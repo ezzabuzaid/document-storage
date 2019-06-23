@@ -29,19 +29,19 @@ export class IndexDB {
         });
     }
 
-    private transaction(name: string[], accsess: IDBTransactionMode) {
-        return this.openDB().pipe(map((database) => database.transaction(name, accsess)));
-    }
+    // private transaction(name: string[], accsess: IDBTransactionMode) {
+    //     return this.openDB().pipe(map((database) => database.transaction(name, accsess)));
+    // }
 
-    objectStore(name = this.objectStoreName) {
+    // objectStore(name = this.objectStoreName) {
 
-        if (!name) {
-            throw new Error('Please provide object store name by calling configure() or by used method');
-        }
+    //     if (!name) {
+    //         throw new Error('Please provide object store name by calling configure() or by used method');
+    //     }
 
-        // for each operation a transaction will be opened, consider workaround it
-        return this.transaction([name], 'readwrite').pipe(map((data) => data.objectStore(name)));
-    }
+    //     // for each operation a transaction will be opened, consider workaround it
+    //     return this.transaction([name], 'readwrite').pipe(map((data) => data.objectStore(name)));
+    // }
 
     configure(options: IndexDBConfiguration) {
         // if all the required is the object store you can pass it in [objectStore] method
@@ -57,26 +57,26 @@ export class IndexDB {
         return this;
     }
 
-    deleteItem(id: string, objectStoreName = this.objectStoreName) {
-        this.objectStore(objectStoreName)
-            .pipe(map(object => {
-                return object.delete(id);
-            }));
-    }
+    // deleteItem(id: string, objectStoreName = this.objectStoreName) {
+    //     this.objectStore(objectStoreName)
+    //         .pipe(map(object => {
+    //             return object.delete(id);
+    //         }));
+    // }
 
-    getItem(id: string, objectStoreName = this.objectStoreName) {
-        this.objectStore(objectStoreName)
-            .pipe(map(object => {
-                return object.get(id);
-            }));
-    }
+    // getItem(id: string, objectStoreName = this.objectStoreName) {
+    //     this.objectStore(objectStoreName)
+    //         .pipe(map(object => {
+    //             return object.get(id);
+    //         }));
+    // }
 
-    updateItem(id, objectStoreName = this.objectStoreName) {
-        this.objectStore(objectStoreName)
-            .pipe(map(object => {
-                return object.put(id);
-            }));
-    }
+    // updateItem(id, objectStoreName = this.objectStoreName) {
+    //     this.objectStore(objectStoreName)
+    //         .pipe(map(object => {
+    //             return object.put(id);
+    //         }));
+    // }
 
 }
 

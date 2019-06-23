@@ -10,9 +10,11 @@ export class LocalStorage implements Storage {
   private getItem() {
     return JSON.parse(this.storage.getItem(this.name));
   }
+
   private presist<T>(item: any) {
     this.storage.setItem(this.name, item);
   }
+
   set(name: string, value: any) {
     const item = this.getItem();
     item[name] = value;
@@ -27,7 +29,7 @@ export class LocalStorage implements Storage {
     this.storage.removeItem(this.name);
   }
 
-  remove<T>(name: string) {
+  delete<T>(name: string) {
     const item = this.getItem();
     const temp = item[name];
     item[name] = null;

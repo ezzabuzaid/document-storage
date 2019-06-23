@@ -5,7 +5,7 @@ export class Collection<T> {
 
     constructor(
         private storage: Storage,
-        public name: string,
+        private name: string,
     ) { }
 
     private _update(cursor) {
@@ -65,7 +65,7 @@ export class Collection<T> {
     }
 
     clear() {
-        this.storage.clear(this.name);
+        this.storage.clear();
     }
 
 }

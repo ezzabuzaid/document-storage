@@ -1,8 +1,8 @@
 export interface Storage {
     get: <T>(name: string) => T;
-    remove: <T>(name: string) => T;
+    delete: <T>(name: string) => T;
+    clear: () => void;
     set: (name: string, value: any) => void;
-    clear: (name: string) => void;
 }
 export type Entity<T> = T & { readonly id: number };
 
