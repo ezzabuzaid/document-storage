@@ -16,21 +16,23 @@ export class Collection<T> {
         return cursor.find(find(id, 'id')) || null;
     }
 
-    create(entity: Entity<T>): Entity<T> {
+    create(entity: T): Entity<T> {
+        const _entity = entity as Entity<T>;
         const cursor = this.cursor();
-        entity['id' as any] = cursor.length;
-        cursor.push(entity);
+        _entity['id' as any] = cursor.length;
+        cursor.push(_entity);
         this.update(cursor);
-        return entity;
+        return _entity;
     }
 
-    put(entity: Entity<T>): Entity<T> {
+    put(entity: T): Entity<T> {
+        const _entity = entity as Entity<T>;
         const cursor = this.cursor();
-        if (!this.entityExisit(cursor, entity.id)) {
+        if (!this.entityExisit(cursor, _entity.id)) {
             return null;
         }
-        const oldEntity = cursor[entity.id];
-        cursor[entity.id] = entity;
+        const oldEntity = cursor[_entity.id];
+        cursor[_entity['id'] ] = entity as any;
         this.update(cursor);
         return oldEntity;
     }
@@ -46,7 +48,7 @@ export class Collection<T> {
         return entity;
     }
 
-    set(entity: Entity<T>): Entity<T> {
+    set(entity: T): Entity<T> {
         return this.put(entity) || this.create(entity);
     }
 
@@ -59,9 +61,9 @@ export class Collection<T> {
         return cursor.find(queryCallback);
     }
 
-    get(by: string, value: any) {
+    get(by: keyof T, value: any) {
         const cursor = this.cursor();
-        return cursor.find(find(value, by));
+        return cursor.find(find(value, by as string));
     }
 
     clear() {

@@ -1,9 +1,9 @@
 import { LocalStorage } from './localstorage';
-import { DatabaseProvider } from './provider';
 import { Storage } from '..';
-import { IndexDB } from './indexdb';
 import { InMemory } from './memory';
 import { Collection } from './collection';
+import { DatabaseProvider } from './provider';
+import { IndexDB } from './indexdb';
 
 
 export class Database {
@@ -52,5 +52,5 @@ export class Database {
 }
 const database1 = new Database(new LocalStorage('testDB'));
 const database2 = new Database(new InMemory());
-// const database3 = new Database(new IndexDB('testDB'));
 // TODO schema validation
+// Async database new AsyncDatabase(new IndexDB('testDB'));
