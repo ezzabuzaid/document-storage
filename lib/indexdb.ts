@@ -1,91 +1,54 @@
+import { AsyncStorage } from "..";
+import { IDBPDatabase, openDB, DBSchema } from "idb";
+
 const $window = (window as any);
 $window.indexedDB = $window.indexedDB || $window.mozIndexedDB || $window.webkitIndexedDB || $window.msIndexedDB;
 $window.IDBTransaction = $window.IDBTransaction || $window.webkitIDBTransaction || $window.msIDBTransaction || { READ_WRITE: 'readwrite' };
 $window.IDBKeyRange = $window.IDBKeyRange || $window.webkitIDBKeyRange || $window.msIDBKeyRange;
 
-export class IndexDB {
-    private storage: typeof indexedDB = window.indexedDB;
-    private databaseName: string = null;
-    private version = 4;
-    private database: IDBDatabase = null;
-    private objectStoreName = null;
 
-    constructor(name: string) {
-        this.databaseName = name;
-    }
+export class IndexDB implements AsyncStorage {
+    private database: IDBPDatabase = null;
 
-    private openDB() {
-        const request = this.storage.open(this.databaseName, this.version);
-        request.addEventListener('success', () => {
-            request.removeEventListener('success', () => {
-                this.database = request.result
+    constructor(
+        private name: string,
+        private version = 4
+    ) {
+        openDB('StrategyStorage', this.version, { upgrade: this.onUpgrade })
+            .then((database) => {
+                this.database = database;
+                this.database.createObjectStore(this.name, { keyPath: 'id', });
             });
-        });
-
-        request.addEventListener('error', () => { });
-
-        request.addEventListener('upgradeneeded', ({ target }) => {
-            // target['result']
-        });
     }
 
-    // private transaction(name: string[], accsess: IDBTransactionMode) {
-    //     return this.openDB().pipe(map((database) => database.transaction(name, accsess)));
-    // }
+    private onUpgrade(db, oldVersion, newVersion, transaction) {
 
-    // objectStore(name = this.objectStoreName) {
-
-    //     if (!name) {
-    //         throw new Error('Please provide object store name by calling configure() or by used method');
-    //     }
-
-    //     // for each operation a transaction will be opened, consider workaround it
-    //     return this.transaction([name], 'readwrite').pipe(map((data) => data.objectStore(name)));
-    // }
-
-    configure(options: IndexDBConfiguration) {
-        // if all the required is the object store you can pass it in [objectStore] method
-        this.objectStoreName = options.objectStoreName;
     }
 
-    /**
-     *
-     */
-    populate({ name, version }: IndexDBPopulation) {
-        this.databaseName = name;
-        this.version = version;
-        return this;
+    private get transaction() {
+        return this.database.transaction(this.name, 'readwrite');
     }
 
-    // deleteItem(id: string, objectStoreName = this.objectStoreName) {
-    //     this.objectStore(objectStoreName)
-    //         .pipe(map(object => {
-    //             return object.delete(id);
-    //         }));
-    // }
+    private get objectStore() {
+        return this.transaction.objectStore(this.name);
+    }
 
-    // getItem(id: string, objectStoreName = this.objectStoreName) {
-    //     this.objectStore(objectStoreName)
-    //         .pipe(map(object => {
-    //             return object.get(id);
-    //         }));
-    // }
+    set<T>(object) {
+        this.objectStore.add(object);
+        return this.objectStore.put(object) as unknown as Promise<T>;
+    }
 
-    // updateItem(id, objectStoreName = this.objectStoreName) {
-    //     this.objectStore(objectStoreName)
-    //         .pipe(map(object => {
-    //             return object.put(id);
-    //         }));
-    // }
+    get<T>(name: string) {
+        return this.objectStore.get(name) as Promise<T>;
+    }
 
+    clear() {
+        // NOTE must called in upgrade event
+        return resolve(this.database.deleteObjectStore(name));
+    }
+
+    delete(name) {
+        return this.objectStore.delete(name);
+    }
 }
-
-interface IndexDBConfiguration {
-    objectStoreName: string;
-}
-
-interface IndexDBPopulation {
-    name: string;
-    version: number;
-
-}
+const resolve = <T = void>(value) => Promise.resolve<T>(value);

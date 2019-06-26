@@ -1,7 +1,7 @@
 import { Storage } from "..";
 
 export class LocalStorage implements Storage {
-  private storage = localStorage;
+  protected storage = localStorage;
 
   constructor(
     private name: string
@@ -11,14 +11,16 @@ export class LocalStorage implements Storage {
     return JSON.parse(this.storage.getItem(this.name));
   }
 
-  private presist<T>(item: any) {
+  private presist<T>(name: string, value: T) {
+    const item = this.getItem();
+    const temp = item[name];
+    item[name] = value;
     this.storage.setItem(this.name, item);
+    return temp as T;
   }
 
-  set(name: string, value: any) {
-    const item = this.getItem();
-    item[name] = value;
-    this.presist(item);
+  set<T>(name: string, value: any) {
+    return this.presist<T>(name, value);
   }
 
   get<T>(name: string): T {
@@ -30,11 +32,7 @@ export class LocalStorage implements Storage {
   }
 
   delete<T>(name: string) {
-    const item = this.getItem();
-    const temp = item[name];
-    item[name] = null;
-    this.presist<T>(item);
-    return temp;
+    return this.presist<T>(name, null);
   }
 
 }

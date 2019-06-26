@@ -8,8 +8,9 @@ export class InMemory implements Storage {
         return this.storage[name];
     }
 
-    set(name: string, value: any) {
+    set<T>(name: string, value: T) {
         this.storage[name] = value;
+        return value;
     }
 
     delete<T>(name: string): T {
