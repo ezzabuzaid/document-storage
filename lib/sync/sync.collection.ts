@@ -1,5 +1,6 @@
-import { Storage, Entity } from '..';
-import { find } from './utils';
+import { find } from "../utils";
+import { Entity } from "../..";
+import { Storage } from "../types";
 
 export class Collection<T> {
 
@@ -12,7 +13,7 @@ export class Collection<T> {
         this.storage.set(this.name, cursor);
     }
 
-    private entityExisit(cursor: Entity<T>[], id: number) {
+    private isExist(cursor: Entity<T>[], id: number) {
         return cursor.find(find(id, 'id')) || null;
     }
 
@@ -28,7 +29,7 @@ export class Collection<T> {
     put(entity: T): Entity<T> {
         const _entity = entity as Entity<T>;
         const cursor = this.cursor();
-        if (!this.entityExisit(cursor, _entity.id)) {
+        if (!this.isExist(cursor, _entity.id)) {
             return null;
         }
         const oldEntity = cursor[_entity.id];
@@ -39,7 +40,7 @@ export class Collection<T> {
 
     delete(id: number): Entity<T> {
         const cursor = this.cursor();
-        const entity = this.entityExisit(cursor, id)
+        const entity = this.isExist(cursor, id)
         if (!entity) {
             return null;
         }

@@ -1,4 +1,4 @@
-import { Storage } from "..";
+import { Storage } from "../types";
 
 export class InMemory implements Storage {
     storage = {};

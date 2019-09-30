@@ -1,11 +1,5 @@
-import { AsyncStorage } from "..";
-import { IDBPDatabase, openDB, DBSchema } from "idb";
-
-const $window = (window as any);
-$window.indexedDB = $window.indexedDB || $window.mozIndexedDB || $window.webkitIndexedDB || $window.msIndexedDB;
-$window.IDBTransaction = $window.IDBTransaction || $window.webkitIDBTransaction || $window.msIDBTransaction || { READ_WRITE: 'readwrite' };
-$window.IDBKeyRange = $window.IDBKeyRange || $window.webkitIDBKeyRange || $window.msIDBKeyRange;
-
+import { IDBPDatabase, openDB } from "idb";
+import { AsyncStorage } from "../types";
 
 export class IndexDB implements AsyncStorage {
     private database: IDBPDatabase = null;
@@ -13,8 +7,10 @@ export class IndexDB implements AsyncStorage {
     constructor(
         private name: string,
         private version = 4
-    ) {
-        openDB('StrategyStorage', this.version, { upgrade: this.onUpgrade })
+    ) { }
+
+    public prepare() {
+        return openDB('StrategyStorage', this.version, { upgrade: this.onUpgrade })
             .then((database) => {
                 this.database = database;
                 this.database.createObjectStore(this.name, { keyPath: 'id', });

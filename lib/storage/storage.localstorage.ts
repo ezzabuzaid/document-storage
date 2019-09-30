@@ -1,4 +1,4 @@
-import { Storage } from "..";
+import { Storage } from "../types";
 
 export class LocalStorage implements Storage {
   protected storage = localStorage;
