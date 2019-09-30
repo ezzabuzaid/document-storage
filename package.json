@@ -7,12 +7,13 @@
     "ts-lint": "^4.5.1",
     "typescript": "^3.6.3"
   },
+  "main": "./index.js",
   "name": "@ezzabuzaid/document-storage",
   "bugs": {
     "email": "ezzabuzaid@hotmail.com",
     "url": "https://github.com/ezzabuzaid/document-storage/issues"
   },
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Easy interface for document manualpation",
   "keywords": [
     "Storage",
