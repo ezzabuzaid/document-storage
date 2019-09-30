@@ -1,17 +1,32 @@
 {
-  "name": "storage",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^3.5.2"
-  },
+  "scripts": {},
   "dependencies": {
     "idb": "^4.0.3"
-  }
+  },
+  "devDependencies": {
+    "ts-lint": "^4.5.1",
+    "typescript": "^3.6.3"
+  },
+  "name": "@ezzabuzaid/document-storage",
+  "bugs": {
+    "email": "ezzabuzaid@hotmail.com",
+    "url": "https://github.com/ezzabuzaid/document-storage/issues"
+  },
+  "version": "0.0.1",
+  "description": "Easy interface for document manualpation",
+  "keywords": [
+    "Storage",
+    "Node storage",
+    "In memory storage",
+    "Runtime storage"
+  ],
+  "homepage": "https://github.com/ezzabuzaid/document-storage",
+  "author": {
+    "name": "ezzabuzaid",
+    "email": "ezzabuzaid@hotmail.com",
+    "url": "https://ezzabuzaid.com"
+  },
+  "repository": "github:ezzabuzaid/document-storage",
+  "private": false,
+  "license": "MIT"
 }
