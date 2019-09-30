@@ -8,7 +8,7 @@ export class AsyncCollection<T> {
     ) { }
 
     private update(entites: Entity<T>[]) {
-        this.storage.set(this.name, entites);
+        return this.storage.set(this.name, entites);
     }
 
     private isExist(entites: Entity<T>[], id: number) {
@@ -27,7 +27,7 @@ export class AsyncCollection<T> {
     private async  put(entity: T): Promise<Entity<T>> {
         const _entity = entity as Entity<T>;
         const entites = await this.getAll();
-        if (!this.isExist(entites, _entity.id)) {
+        if (_entity.id && !this.isExist(entites, _entity.id)) {
             return null;
         }
         const oldEntity = entites[_entity.id];
@@ -48,7 +48,7 @@ export class AsyncCollection<T> {
     }
 
     public async set(entity: T): Promise<Entity<T>> {
-        return this.put(entity) || this.create(entity);
+        return (await this.put(entity)) || (await this.create(entity));
     }
 
     public async get(queryCallback: (object: Entity<T>) => boolean) {
