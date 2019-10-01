@@ -15,25 +15,22 @@ export class AsyncCollection<T> {
         return entites.find(find(id, 'id')) || null;
     }
 
-    private async  create(entity: T): Promise<Entity<T>> {
-        const _entity = entity as Entity<T>;
+    public async create(entity: Entity<T>): Promise<Entity<T>> {
         const entites = await this.getAll();
-        _entity['id' as any] = entites.length;
-        entites.push(_entity);
+        entity['id' as any] = entites.length;
+        entites.push(entity);
         await this.update(entites);
-        return _entity;
+        return entity;
     }
 
-    private async  put(entity: T): Promise<Entity<T>> {
-        const _entity = entity as Entity<T>;
+    public async put(entity: Entity<T>): Promise<Entity<T>> {
         const entites = await this.getAll();
-        if (_entity.id && !this.isExist(entites, _entity.id)) {
+        if (entity.id && !this.isExist(entites, entity.id)) {
             return null;
         }
-        const oldEntity = entites[_entity.id];
-        entites[_entity.id] = entity as any;
+        entites[entity.id] = entity;
         await this.update(entites);
-        return oldEntity;
+        return entity;
     }
 
     public async delete(id: number): Promise<Entity<T>> {
@@ -45,10 +42,6 @@ export class AsyncCollection<T> {
         entites.splice(id, 1);
         await this.update(entites);
         return entity;
-    }
-
-    public async set(entity: T): Promise<Entity<T>> {
-        return (await this.put(entity)) || (await this.create(entity));
     }
 
     public async get(queryCallback: (object: Entity<T>) => boolean) {
