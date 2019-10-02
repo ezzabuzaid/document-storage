@@ -7,7 +7,7 @@ export interface SyncStorage {
 }
 
 export interface AsyncStorage {
-    get<T>(name: string): Promise<Entity<T>>;
+    get<T>(name: string): Promise<Entity<T>[]>;
     clear(name?: string): Promise<void>;
     set<T>(name: string, value: Entity<T>[]): Promise<Entity<T>>;
 }

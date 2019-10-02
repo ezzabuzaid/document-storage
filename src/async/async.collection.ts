@@ -15,12 +15,12 @@ export class AsyncCollection<T> {
         return entites.find(find(id, 'id')) || null;
     }
 
-    public async create(entity: Entity<T>): Promise<Entity<T>> {
+    public async create(entity: T): Promise<Entity<T>> {
         const entites = await this.getAll();
         entity['id' as any] = entites.length;
-        entites.push(entity);
+        entites.push(entity as Entity<T>);
         await this.update(entites);
-        return entity;
+        return entity as Entity<T>;
     }
 
     public async put(entity: Entity<T>): Promise<Entity<T>> {
@@ -50,7 +50,7 @@ export class AsyncCollection<T> {
     }
 
     public async getAll() {
-        return (await this.storage.get<Entity<T>[]>(this.name)) || [];
+        return (await this.storage.get<T>(this.name)) || [] as unknown as Entity<T>[];
     }
 
     public async clear() {
