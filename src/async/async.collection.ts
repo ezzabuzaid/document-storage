@@ -24,7 +24,7 @@ export class AsyncCollection<T> {
 
     public async create(entity: T): Promise<Entity<T>> {
         const entites = await this.getAll();
-        entity['id' as any] = entites.length;
+        entity['id' as any] = Math.max(...entites.map(entity => +entity.id)) + 1;
         entites.push(entity as Entity<T>);
         await this.update(entites);
         return entity as Entity<T>;
@@ -33,7 +33,7 @@ export class AsyncCollection<T> {
     public async put(entity: Entity<T>): Promise<Entity<T>> {
         const entites = await this.getAll();
         const exist = this.isExist(entites, entity.id);
-        if (entity.id && !exist) {
+        if (entity.id && !!!exist) {
             return null;
         }
         entites[exist.index] = entity;
