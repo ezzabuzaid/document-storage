@@ -12,7 +12,14 @@ export class AsyncCollection<T> {
     }
 
     private isExist(entites: Entity<T>[], id: number) {
-        return entites.find(find(id, 'id')) || null;
+        const index = entites.findIndex(find(+id, 'id'));
+        if (index > -1) {
+            return {
+                entity: entites[index],
+                index
+            }
+        }
+        return null;
     }
 
     public async create(entity: T): Promise<Entity<T>> {
@@ -25,23 +32,24 @@ export class AsyncCollection<T> {
 
     public async put(entity: Entity<T>): Promise<Entity<T>> {
         const entites = await this.getAll();
-        if (entity.id && !this.isExist(entites, entity.id)) {
+        const exist = this.isExist(entites, entity.id);
+        if (entity.id && !exist) {
             return null;
         }
-        entites[entity.id] = entity;
+        entites[exist.index] = entity;
         await this.update(entites);
-        return entity;
+        return exist.entity;
     }
 
     public async delete(id: number): Promise<Entity<T>> {
         const entites = await this.getAll();
-        const entity = this.isExist(entites, id)
-        if (!entity) {
+        const exist = this.isExist(entites, id);
+        if (!exist) {
             return null;
         }
-        entites.splice(id, 1);
+        entites.splice(exist.index, 1);
         await this.update(entites);
-        return entity;
+        return exist.entity;
     }
 
     public async get(queryCallback: (object: Entity<T>) => boolean) {
