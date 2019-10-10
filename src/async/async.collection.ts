@@ -33,12 +33,19 @@ export class AsyncCollection<T> {
     public async put(entity: Entity<T>): Promise<Entity<T>> {
         const entites = await this.getAll();
         const exist = this.isExist(entites, entity.id);
-        if (entity.id && !!!exist) {
+        if (!!!exist) {
             return null;
         }
         entites[exist.index] = entity;
         await this.update(entites);
-        return exist.entity;
+        return entity;
+    }
+
+    public async set(entity: Entity<T> | T) {
+        const entites = await this.getAll();
+        if (entity['id']) {
+
+        }
     }
 
     public async delete(id: number): Promise<Entity<T>> {

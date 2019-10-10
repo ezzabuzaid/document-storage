@@ -2,6 +2,8 @@ import { Collection } from "../sync/sync.collection";
 import { AsyncStorage } from "../types";
 import { AsyncCollection } from "./async.collection";
 
+// TODO: setup cache current collection option
+
 export class AsyncDatabase {
     private collections: { [index: string]: AsyncCollection<any> } = {};
 
