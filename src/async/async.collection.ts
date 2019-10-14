@@ -24,10 +24,7 @@ export class AsyncCollection<T> {
 
     public async create(entity: T): Promise<Entity<T>> {
         const entites = await this.getAll();
-        entity['id' as any] = Math.max(...entites.map(entity => +entity.id)) + 1;
-        entites.push(entity as Entity<T>);
-        await this.update(entites);
-        return entity as Entity<T>;
+        return this._create(entites, entity);
     }
 
     public async put(entity: Entity<T>): Promise<Entity<T>> {
@@ -36,15 +33,22 @@ export class AsyncCollection<T> {
         if (!!!exist) {
             return null;
         }
-        entites[exist.index] = entity;
-        await this.update(entites);
-        return entity;
+        return this._put(entites, entity, exist);
     }
 
-    public async set(entity: Entity<T> | T) {
+    public async set(entity: T) {
         const entites = await this.getAll();
-        if (entity['id']) {
-
+        const id = entity['id'];
+        if (id) {
+            const exist = this.isExist(entites, id);
+            if (!!!exist) {
+                entity['id'] = null;
+                await this.set(entity);
+            } else {
+                return this._put(entites, entity, exist);
+            }
+        } else {
+            return this._create(entites, entity);
         }
     }
 
@@ -59,7 +63,7 @@ export class AsyncCollection<T> {
         return exist.entity;
     }
 
-    public async get(queryCallback: (object: Entity<T>) => boolean) {
+    public async get(queryCallback: (object: Entity<T>, index?: number) => boolean) {
         const entites = await this.getAll();
         return entites.find(queryCallback);
     }
@@ -70,5 +74,18 @@ export class AsyncCollection<T> {
 
     public async clear() {
         return this.storage.clear(this.name);
+    }
+
+    private async _create(entites, entity) {
+        entity['id' as any] = Math.max(...entites.map(entity => +entity.id)) + 1;
+        entites.push(entity as Entity<T>);
+        await this.update(entites);
+        return entity as Entity<T>;
+    }
+    
+    private async _put(entites, entity, existance) {
+        entites[existance.index] = entity;
+        await this.update(entites);
+        return entity;
     }
 }
