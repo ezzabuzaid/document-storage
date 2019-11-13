@@ -39,7 +39,7 @@ export class AsyncCollection<T> {
     public async set(entity: T) {
         const entites = await this.getAll();
         const id = entity['id'];
-        if (id) {
+        if (id !== null && id !== undefined) {
             const exist = this.isExist(entites, id);
             if (!!!exist) {
                 entity['id'] = null;
@@ -77,12 +77,13 @@ export class AsyncCollection<T> {
     }
 
     private async _create(entites, entity) {
-        entity['id' as any] = Math.max(...entites.map(entity => +entity.id)) + 1;
+        const id = Math.max(...entites.map(entity => +entity.id))
+        entity['id' as any] = id < 0 ? 0 : id + 1;
         entites.push(entity as Entity<T>);
         await this.update(entites);
         return entity as Entity<T>;
     }
-    
+
     private async _put(entites, entity, existance) {
         entites[existance.index] = entity;
         await this.update(entites);

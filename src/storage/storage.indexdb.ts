@@ -7,10 +7,8 @@ export class IndexDB implements AsyncStorage {
     constructor(
         private name: string,
         private version = 4
-    ) { }
-
-    public prepare() {
-        return openDB('StrategyStorage', this.version, { upgrade: this.onUpgrade })
+    ) {
+        openDB('StrategyStorage', this.version, { upgrade: this.onUpgrade })
             .then((database) => {
                 this.database = database;
                 this.database.createObjectStore(this.name, { keyPath: 'id', });
@@ -18,7 +16,7 @@ export class IndexDB implements AsyncStorage {
     }
 
     private onUpgrade(db, oldVersion, newVersion, transaction) {
-
+        console.log('Start upgrade');
     }
 
     private get transaction() {
