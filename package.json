@@ -3,7 +3,7 @@
     "prepublish": "node .js && tsc"
   },
   "dependencies": {
-    "idb": "^4.0.3"
+    "idb": "^4.0.5"
   },
   "devDependencies": {
     "ts-lint": "^4.5.1",

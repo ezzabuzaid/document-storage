@@ -4,7 +4,7 @@ export class LocalStorage implements SyncStorage {
   protected storage = localStorage
   
   constructor(
-    private name: string,
+    private name = 'storage',
   ) { }
 
   private getItem() {
