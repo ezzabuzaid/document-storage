@@ -2,13 +2,14 @@ import { SyncStorage } from "../types";
 
 export class LocalStorage implements SyncStorage {
   protected storage = localStorage
-  
+
   constructor(
     private name = 'storage',
   ) { }
 
   private getItem() {
-    return JSON.parse(this.storage.getItem(this.name));
+    const storage = JSON.parse(this.storage.getItem(this.name))
+    return storage || {};
   }
 
   private presist<T>(name: string, value: T) {
