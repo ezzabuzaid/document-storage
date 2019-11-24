@@ -16,7 +16,7 @@ export class LocalStorage implements SyncStorage {
     const item = this.getItem();
     const temp = item[name];
     item[name] = value;
-    this.storage.setItem(this.name, item);
+    this.storage.setItem(this.name, JSON.stringify(item));
     return temp as T;
   }
 
