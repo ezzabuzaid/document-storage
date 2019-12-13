@@ -1,4 +1,4 @@
-import { find } from "../utils";
+import { find, isItemExist, not, isNullOrUndefiend } from "../utils";
 import { AsyncStorage, Entity } from "../types";
 export class AsyncCollection<T> {
 
@@ -11,17 +11,6 @@ export class AsyncCollection<T> {
         return this.storage.set(this.name, entites);
     }
 
-    private isExist(entites: Entity<T>[], id: number) {
-        const index = entites.findIndex(find(+id, 'id'));
-        if (index > -1) {
-            return {
-                entity: entites[index],
-                index
-            }
-        }
-        return null;
-    }
-
     public async create(entity: T): Promise<Entity<T>> {
         const entites = await this.getAll();
         return this._create(entites, entity);
@@ -29,8 +18,8 @@ export class AsyncCollection<T> {
 
     public async put(entity: Entity<T>): Promise<Entity<T>> {
         const entites = await this.getAll();
-        const exist = this.isExist(entites, entity.id);
-        if (!!!exist) {
+        const exist = isItemExist(entites, entity.id);
+        if (not(exist)) {
             return null;
         }
         return this._put(entites, entity, exist);
@@ -39,13 +28,13 @@ export class AsyncCollection<T> {
     public async set(entity: T) {
         const entites = await this.getAll();
         const id = entity['id'];
-        if (id !== null && id !== undefined) {
-            const exist = this.isExist(entites, id);
-            if (!!!exist) {
+        if (not(isNullOrUndefiend(id))) {
+            const exist = isItemExist(entites, id);
+            if (not(exist)) {
                 entity['id'] = null;
                 await this.set(entity);
             } else {
-                return this._put(entites, entity, exist);
+                return this._put(entites, entity as Entity<T>, exist);
             }
         } else {
             return this._create(entites, entity);
@@ -54,7 +43,7 @@ export class AsyncCollection<T> {
 
     public async delete(id: number): Promise<Entity<T>> {
         const entites = await this.getAll();
-        const exist = this.isExist(entites, id);
+        const exist = isItemExist(entites, id);
         if (!exist) {
             return null;
         }
@@ -69,14 +58,14 @@ export class AsyncCollection<T> {
     }
 
     public async getAll() {
-        return (await this.storage.get<T>(this.name)) || [] as unknown as Entity<T>[];
+        return (await this.storage.get<T>(this.name)) || [];
     }
 
-    public async clear() {
+    public clear() {
         return this.storage.clear(this.name);
     }
 
-    private async _create(entites, entity) {
+    private async _create(entites: Entity<T>[], entity: T) {
         const id = Math.max(...entites.map(entity => +entity.id))
         entity['id' as any] = id < 0 ? 0 : id + 1;
         entites.push(entity as Entity<T>);
@@ -84,7 +73,7 @@ export class AsyncCollection<T> {
         return entity as Entity<T>;
     }
 
-    private async _put(entites, entity, existance) {
+    private async _put(entites: Entity<T>[], entity: Entity<T>, existance: ReturnType<typeof isItemExist>) {
         entites[existance.index] = entity;
         await this.update(entites);
         return entity;

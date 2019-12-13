@@ -2,7 +2,7 @@ import { Collection } from './sync.collection';
 import { SyncStorage } from '../types';
 
 export class Database {
-    private collections: { [index: string]: Collection<any> } = null;
+    private collections: { [index: string]: Collection<any> } = {};
 
     constructor(
         private storage: SyncStorage
