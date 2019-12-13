@@ -1,9 +1,9 @@
-import { Collection, SyncStorage } from "../../src/index";
+import { SyncCollection, SyncStorage } from "../../src/index";
 class Todo {
     constructor(public name: string) { }
 }
 describe('#SyncCollection', () => {
-    let collection: Collection<Todo>;
+    let collection: SyncCollection<Todo>;
     let mockStorage: SyncStorage;
     let mockStorageFn: jest.Mock<Partial<SyncStorage>, any>;
     const COLLECTION_NAME = 'test';
@@ -16,7 +16,7 @@ describe('#SyncCollection', () => {
                 set: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
         it('Should invoke the get method from the storage', () => {
             collection.getAll();
@@ -36,7 +36,7 @@ describe('#SyncCollection', () => {
                 set: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
 
         it('Should return null if the item is not exist', () => {
@@ -67,7 +67,7 @@ describe('#SyncCollection', () => {
                 set: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
 
         it('Should invoke the set method from the storage', () => {
@@ -101,7 +101,7 @@ describe('#SyncCollection', () => {
                 set: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
 
         it('Should create new entity if it does not exist', () => {
@@ -127,7 +127,7 @@ describe('#SyncCollection', () => {
                 set: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
 
         it('Should return null if the item is not exist', () => {
@@ -158,7 +158,7 @@ describe('#SyncCollection', () => {
                 set: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
 
         it('Should return null if the entity is not exist', () => {
@@ -180,7 +180,7 @@ describe('#SyncCollection', () => {
                 clear: jest.fn()
             })));
             mockStorage = mockStorageFn() as SyncStorage;
-            collection = new Collection<Todo>(mockStorage, COLLECTION_NAME);
+            collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
         });
 
         it('Should invoke the clear method from storage', () => {

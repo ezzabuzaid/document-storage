@@ -1,7 +1,7 @@
-import { find, isItemExist, not, isNullOrUndefiend } from "../utils";
+import { isItemExist, not, isNullOrUndefiend } from "../utils";
 import { SyncStorage, Entity } from "../types";
 
-export class Collection<T> {
+export class SyncCollection<T> {
 
     constructor(
         private storage: SyncStorage,

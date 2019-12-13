@@ -7,3 +7,4 @@ export * from './storage/session.storage';
 export * from './storage/storage.indexdb';
 export * from './storage/storage.localstorage';
 export * from './storage/storage.memory';
+export * from './database';
