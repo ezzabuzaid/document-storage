@@ -1,4 +1,3 @@
-
 export class Database<TStorage, TCollection> {
     protected collections: { [index: string]: TCollection } = {};
 

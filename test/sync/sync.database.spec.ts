@@ -1,4 +1,4 @@
-import { SyncDatabase, SyncStorage } from "../../src/index";
+import { SyncDatabase, SyncStorage, Database } from "../../src/index";
 
 describe('#Sync Database', () => {
     const mockStorageFn = jest.fn<Partial<SyncStorage>, any>((() => ({
