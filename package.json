@@ -1,11 +1,15 @@
 {
   "scripts": {
-    "prepublish": "node .js && tsc"
+    "prepublish": "node .js && tsc",
+    "test": "jest --watch"
   },
   "dependencies": {
     "idb": "^4.0.5"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
     "ts-lint": "^4.5.1",
     "typescript": "^3.6.3"
   },
