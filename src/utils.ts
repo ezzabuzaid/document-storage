@@ -19,5 +19,5 @@ export function not(value: any) {
 }
 
 export function isNullOrUndefiend(value: any) {
-    return value === null && value === undefined;
+    return value === null || value === undefined;
 }

@@ -51,6 +51,7 @@ export class Collection<T> {
                 return this._put(entites, entity as Entity<T>, exist);
             }
         } else {
+            console.log('CREAET');
             return this._create(entites, entity);
         }
     }
@@ -72,7 +73,7 @@ export class Collection<T> {
 
     public get(queryCallback: (object: Entity<T>) => boolean) {
         const entites = this.getAll();
-        return entites.find(queryCallback);
+        return entites.find(queryCallback) || null;
     }
 
     public clear() {
