@@ -9,6 +9,9 @@
     "rootDir": "./src/",
     "moduleResolution": "node",
     "baseUrl": "./src/",
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+  },
+  "exclude": [
+    "./**/*.spec.ts"
+  ]
 }
