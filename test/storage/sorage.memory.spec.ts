@@ -7,7 +7,7 @@ describe('#InMemory', () => {
     });
     it('Should return the entity after store it ', () => {
         const storage = new InMemory();
-        expect(storage.set('key', 'value')).toBe('value');
+        expect(storage.set('key', 'value')).toBeNull();
     });
     it('Should set the entity to null when invoking the delete function', () => {
         const storage = new InMemory();

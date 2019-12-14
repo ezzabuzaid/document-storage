@@ -7,32 +7,51 @@ export class LocalStorage implements SyncStorage {
     private name = 'storage',
   ) { }
 
-  private getItem() {
+  public dataSet() {
     const storage = JSON.parse(this.storage.getItem(this.name))
     return storage || {};
   }
 
   private presist<T>(name: string, value: T) {
-    const item = this.getItem();
+    const item = this.dataSet();
     const temp = item[name];
     item[name] = value;
     this.storage.setItem(this.name, JSON.stringify(item));
     return temp as T;
   }
 
-  set<T>(name: string, value: any) {
+  /**
+   * 
+   * @param name name of the entity
+   */
+  public set<T>(name: string, value: any) {
     return this.presist<T>(name, value);
   }
 
-  get<T>(name: string): T {
-    return this.getItem()[name];
+  /**
+   * 
+   * @param name get an entity by it's key
+   */
+  public get<T>(name: string): T {
+    return this.dataSet()[name] || null;
   }
 
-  clear() {
+  /**
+   * 
+   * clear out the entire dataSet
+   * this will store the data set as plain object
+   */
+  public clear() {
     this.storage.removeItem(this.name);
+    this.storage.setItem(this.name, JSON.stringify({}));
   }
 
-  delete<T>(name: string) {
+  /**
+   * 
+   * @param name name of the entity,
+   * store the value as null
+   */
+  public delete<T>(name: string) {
     return this.presist<T>(name, null);
   }
 

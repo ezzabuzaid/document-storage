@@ -18,8 +18,9 @@ export class InMemory implements SyncStorage {
      * store the value or override a presisted value
      */
     set<T>(name: string, value: T) {
+        const temp = this.storage[name];
         this.storage[name] = value;
-        return value;
+        return temp || null;
     }
 
     /**
@@ -28,9 +29,9 @@ export class InMemory implements SyncStorage {
      * store the value as null
      */
     delete<T>(name: string): T {
-        const entity = this.storage[name];
+        const temp = this.storage[name];
         this.storage[name] = null;
-        return entity;
+        return temp;
     }
 
     /**
