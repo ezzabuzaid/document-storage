@@ -1,14 +1,13 @@
 export type Entity<T> = T & { readonly id: number };
 export interface SyncStorage {
-    get<T>(name: string): T;
-    delete<T>(name: string): T;
+    get<T>(name: string): Entity<T>[];
     clear(): void;
-    set<T>(name: string, value: any): T;
+    set<T>(name: string, value: any): Entity<T>;
 }
 
 export interface AsyncStorage {
     get<T>(name: string): Promise<Entity<T>[]>;
-    clear(name?: string): Promise<void>;
+    clear(): Promise<void>;
     set<T>(name: string, value: Entity<T>[]): Promise<Entity<T>>;
 }
 

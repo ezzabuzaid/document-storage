@@ -1,4 +1,4 @@
-import { find, isItemExist, not, isNullOrUndefiend } from "../utils";
+import { isItemExist, not, isNullOrUndefiend } from "../utils";
 import { AsyncStorage, Entity } from "../types";
 export class AsyncCollection<T> {
 
@@ -7,13 +7,26 @@ export class AsyncCollection<T> {
         private name: string,
     ) { }
 
+    private async _create(entites: Entity<T>[], entity: T) {
+        const id = Math.max(...entites.map(entity => +entity.id))
+        entity['id' as any] = id < 0 ? 0 : id + 1;
+        entites.push(entity as Entity<T>);
+        await this.update(entites);
+        return entity as Entity<T>;
+    }
+
+    private async _put(entites: Entity<T>[], entity: Entity<T>, existance: ReturnType<typeof isItemExist>) {
+        entites[existance.index] = entity;
+        await this.update(entites);
+        return entity;
+    }
+
     private update(entites: Entity<T>[]) {
-        return this.storage.set(this.name, entites);
+        return this.storage.set<T>(this.name, entites);
     }
 
     public async create(entity: T): Promise<Entity<T>> {
-        const entites = await this.getAll();
-        return this._create(entites, entity);
+        return this._create(await this.getAll(), entity);
     }
 
     public async put(entity: Entity<T>): Promise<Entity<T>> {
@@ -44,7 +57,7 @@ export class AsyncCollection<T> {
     public async delete(id: number): Promise<Entity<T>> {
         const entites = await this.getAll();
         const exist = isItemExist(entites, id);
-        if (!exist) {
+        if (not(exist)) {
             return null;
         }
         entites.splice(exist.index, 1);
@@ -54,28 +67,15 @@ export class AsyncCollection<T> {
 
     public async get(queryCallback: (object: Entity<T>, index?: number) => boolean) {
         const entites = await this.getAll();
-        return entites.find(queryCallback);
+        return entites.find(queryCallback) || null;
     }
 
     public async getAll() {
         return (await this.storage.get<T>(this.name)) || [];
     }
 
-    public clear() {
-        return this.storage.clear(this.name);
+    public async clear() {
+        await this.storage.clear();
     }
 
-    private async _create(entites: Entity<T>[], entity: T) {
-        const id = Math.max(...entites.map(entity => +entity.id))
-        entity['id' as any] = id < 0 ? 0 : id + 1;
-        entites.push(entity as Entity<T>);
-        await this.update(entites);
-        return entity as Entity<T>;
-    }
-
-    private async _put(entites: Entity<T>[], entity: Entity<T>, existance: ReturnType<typeof isItemExist>) {
-        entites[existance.index] = entity;
-        await this.update(entites);
-        return entity;
-    }
 }
