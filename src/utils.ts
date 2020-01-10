@@ -21,3 +21,7 @@ export function not(value: any) {
 export function isNullOrUndefiend(value: any) {
     return value === null || value === undefined;
 }
+
+export function isBrowser() {
+    return typeof window !== 'undefined' && typeof window.document !== 'undefined';
+}

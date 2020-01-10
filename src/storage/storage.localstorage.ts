@@ -1,10 +1,27 @@
 import { SyncStorage } from "../types";
+import { isBrowser } from "utils";
+
+declare var localStorage;
 
 export class LocalStorage implements SyncStorage {
-  protected storage = localStorage
+  protected _storage = null;
+
+  public get storage() {
+    if (isBrowser()) {
+      return this._storage || localStorage;
+    } else if (this._storage) {
+      return this._storage;
+    } else {
+      throw new TypeError('localStorage is not supported in non browser env');
+    }
+  }
+
+  public set storage(value) {
+    this._storage = value;
+  }
 
   constructor(
-    private name = 'storage',
+    public name = 'storage',
   ) { }
 
   public dataSet() {
