@@ -1,9 +1,9 @@
 import { AsyncDatabase, AsyncStorage, Database } from "../../src/index";
 
 describe('#AsyncDatabase', () => {
-    const mockStorageFn = jest.fn<Partial<AsyncStorage>, any>((() => ({
+    const mockStorageFn = jest.fn<Partial<AsyncStorage>, any>(() => ({
         clear: jest.fn()
-    })));
+    }));
     const mockStorage = mockStorageFn() as AsyncStorage;
 
     const database = new AsyncDatabase(mockStorage);

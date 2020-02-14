@@ -76,7 +76,7 @@ export class SyncCollection<T> {
     }
 
     public clear() {
-        this.storage.clear();
+        this.storage.clear(this.name);
     }
 
 }

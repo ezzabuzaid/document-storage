@@ -1,5 +1,5 @@
 import { SyncStorage } from "../types";
-import { isBrowser } from "utils";
+import { isBrowser } from "../utils";
 
 declare var localStorage;
 

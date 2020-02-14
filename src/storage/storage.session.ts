@@ -1,5 +1,5 @@
 import { LocalStorage } from "./storage.localstorage";
-import { isBrowser } from "utils";
+import { isBrowser } from "../utils";
 
 export class SessionStorage extends LocalStorage {
 

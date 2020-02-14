@@ -7,7 +7,7 @@ export class AsyncDatabase extends Database<AsyncStorage, AsyncCollection<any>> 
     /**
      * get the collection to able to access the write and read the data
      */
-    collection<T>(name: string): T {
+    collection<T>(name: string): AsyncCollection<T> {
         return this.get(name) || this.create(name, AsyncCollection);
     }
 

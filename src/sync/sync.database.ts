@@ -6,7 +6,7 @@ export class SyncDatabase extends Database<SyncStorage, SyncCollection<any>> {
     /**
      * get the collection to able to access the write and read the data
      */
-    collection<T>(name: string): T {
+    collection<T>(name: string): SyncCollection<T> {
         return this.get(name) || this.create(name, SyncCollection);
     }
 

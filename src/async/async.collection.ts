@@ -75,7 +75,7 @@ export class AsyncCollection<T> {
     }
 
     public async clear() {
-        await this.storage.clear();
+        await this.storage.clear(this.name);
     }
 
 }
