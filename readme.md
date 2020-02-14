@@ -73,22 +73,24 @@ in general, overengineer the code is a bad thing, so you really need to think mo
 Releases will be numbered with the following format:<br>
 <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code><br>
 For more information on SemVer, please visit <a href="http://semver.org">http://semver.org</a>.</p>
-<h2 id="developer">Developer</h2>
-<h5 id="ezzabuzaidl"><a href="mailto:ezzabuzaid@hotmail.com">ezzabuzaidl</a></h5>
-<ul>
-<li><a href="https://dev.to/ezzabuzaid">Dev.to</a></li>
-<li><a href="https://github.com/ezzabuzaid">GitHub</a></li>
-<li><a href="https://www.linkedin.com/in/ezzabuzaid">Linkedin</a></li>
-</ul>
-<h2 id="license">License</h2>
-<h5 id="the-mit-license-mit">The MIT License (MIT)</h5>
-<h3 id="summary">Summary</h3>
+<h2 id="summary">Summary</h2>
 <ol>
 <li>This library built on top of typescript so it’s fully supported for types,</li>
 <li>The only way to install through npm (NO CDN).</li>
 <li>It could be used in Node Js since it’s plain functions and objects nothing related to a browser unless you decided to use browser things.</li>
 <li>Entity! just a fancy name.</li>
 </ol>
+<h2 id="developer">Developer</h2>
+<h5 id="ezzabuzaid"><a href="mailto:ezzabuzaid@hotmail.com">Ezzabuzaid</a></h5>
+<ul>
+<li><a href="https://dev.to/ezzabuzaid">Dev.to</a></li>
+<li><a href="https://github.com/ezzabuzaid">GitHub</a></li>
+<li><a href="https://www.linkedin.com/in/ezzabuzaid">Linkedin</a></li>
+</ul>
+<h2 id="maintainers">Maintainers</h2>
+<p><a href="https://github.com/ezzabuzaid"><strong>ezzabuzaid</strong></a> - (author) - <a href="mailto:ezzabuzaid@hotmail.com">ezzabuzaid@hotmail.com</a></p>
+<h2 id="license">License</h2>
+<h5 id="the-mit-license-mit">The MIT License (MIT)</h5>
 <h3 id="todo">TODO</h3>
 <ul>
 <li>Support transactions</li>
