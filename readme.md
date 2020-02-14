@@ -74,7 +74,7 @@ Releases will be numbered with the following format:<br>
 <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code><br>
 For more information on SemVer, please visit <a href="http://semver.org">http://semver.org</a>.</p>
 <h2 id="developer">Developer</h2>
-<h5 id="vijayendra-mudigal"><a href="mailto:vijayendrap@gmail.com">Vijayendra Mudigal</a></h5>
+<h5 id="ezzabuzaidl"><a href="mailto:ezzabuzaid@hotmail.com">ezzabuzaidl</a></h5>
 <ul>
 <li><a href="https://dev.to/ezzabuzaid">Dev.to</a></li>
 <li><a href="https://github.com/ezzabuzaid">GitHub</a></li>
