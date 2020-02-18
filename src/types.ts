@@ -10,4 +10,3 @@ export interface AsyncStorage {
     clear(name?: string): Promise<void>;
     set<T>(name: string, value: Entity<T>[]): Promise<Entity<T>>;
 }
-

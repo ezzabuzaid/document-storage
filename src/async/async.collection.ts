@@ -8,8 +8,7 @@ export class AsyncCollection<T> {
     ) { }
 
     private async _create(entites: Entity<T>[], entity: T) {
-        const id = Math.max(...entites.map(entity => +entity.id))
-        entity['id' as any] = id < 0 ? 0 : id + 1;
+        entity['id' as any] = Date.now();
         entites.push(entity as Entity<T>);
         await this.update(entites);
         return entity as Entity<T>;
