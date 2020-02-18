@@ -44,9 +44,9 @@ describe('#SyncCollection', () => {
         });
 
         it('Should return the entity after delete it', () => {
-            const todo = new Todo('test');
-            collection.create(todo)
-            expect(collection.delete(0)).toBe(todo);
+            const rawTodo = new Todo('test');
+            const todo = collection.create(rawTodo)
+            expect(collection.delete(todo.id)).toBe(rawTodo);
         });
 
     });
@@ -54,9 +54,9 @@ describe('#SyncCollection', () => {
     describe('[create]', () => {
 
         it('Should invoke the set method from the storage', () => {
-            collection.create({ name: 'todo-0' });
+            const todo = collection.create({ name: 'todo-0' });
             expect(mockStorage.set).toBeCalledTimes(1);
-            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, [{ name: 'todo-0', id: 0 }]);
+            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, [todo]);
         });
 
         it('Should increment the id to be unique', () => {
@@ -71,8 +71,8 @@ describe('#SyncCollection', () => {
             todos.splice(0, 1);
 
             const rawTodo = { name: 'todo-3' };
-            collection.create(rawTodo);
-            todos.push({ ...rawTodo, id: 2 });
+            const todo = collection.create(rawTodo);
+            todos.push({ ...rawTodo, id: todo.id });
             expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, todos);
         });
     });

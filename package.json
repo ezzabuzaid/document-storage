@@ -1,7 +1,7 @@
 {
   "scripts": {
     "prepublish": "node .js && tsc",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "dependencies": {
     "idb": "^5.0.1"
@@ -11,7 +11,7 @@
     "jest": "^25.1.0",
     "ts-jest": "^25.2.0",
     "ts-lint": "^4.5.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.6.3"
   },
   "name": "@ezzabuzaid/document-storage",
   "bugs": {
@@ -20,7 +20,7 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Easy interface for document manualpation",
   "keywords": [
     "Storage",

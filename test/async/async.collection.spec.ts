@@ -44,9 +44,9 @@ describe('#AsyncCollection', () => {
         });
 
         it('Should return the entity after delete it', async () => {
-            const todo = new Todo('test');
-            await collection.create(todo)
-            expect(await collection.delete(0)).toBe(todo);
+            const rawTodo = new Todo('test');
+            const todo = await collection.create(rawTodo)
+            expect(await collection.delete(todo.id)).toBe(todo);
         });
 
     });
@@ -54,9 +54,9 @@ describe('#AsyncCollection', () => {
     describe('[create]', () => {
 
         it('Should invoke the set method from the storage', async () => {
-            await collection.create({ name: 'todo-0' });
+            const todo = await collection.create({ name: 'todo-0' });
             expect(mockStorage.set).toBeCalledTimes(1);
-            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, [{ name: 'todo-0', id: 0 }]);
+            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, [{ name: 'todo-0', id: todo.id }]);
         });
 
         it('Should increment the id to be unique', async () => {
@@ -71,8 +71,8 @@ describe('#AsyncCollection', () => {
             todos.splice(0, 1);
 
             const rawTodo = { name: 'todo-3' };
-            await collection.create(rawTodo);
-            todos.push({ ...rawTodo, id: 2 });
+            const todo = await collection.create(rawTodo);
+            todos.push({ ...rawTodo, id: todo.id });
             expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, todos);
         });
     });
