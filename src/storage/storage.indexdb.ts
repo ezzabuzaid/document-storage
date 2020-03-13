@@ -39,17 +39,17 @@ export class IndexedDB implements AsyncStorage {
         const list = await store.getAll();
         const document = list.find(doc => doc.name === name);
         if (!!document) {
-            document.value = value;
+            document.value = JSON.stringify(value);
             return store.put(document) as unknown as Promise<T>;
         } else {
-            return store.add({ name, value }) as unknown as Promise<T>;
+            return store.add({ name, value: JSON.stringify(value) }) as unknown as Promise<T>;
         }
     }
 
     public async get<T>(name: string) {
         const list = await (await this.objectStore()).getAll();
         const document = list.find(doc => doc.name === name);
-        return document && document.value;
+        return document && JSON.parse(document.value);
     }
 
     public async clear() {
