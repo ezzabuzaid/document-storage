@@ -39,10 +39,10 @@ export class IndexedDB implements AsyncStorage {
         const list = await store.getAll();
         const document = list.find(doc => doc.name === name);
         if (!!document) {
-            document.value = JSON.stringify(value);
+            document.value = clone(value);
             return store.put(document) as unknown as Promise<T>;
         } else {
-            return store.add({ name, value: JSON.stringify(value) }) as unknown as Promise<T>;
+            return store.add({ name, value: clone(value) }) as unknown as Promise<T>;
         }
     }
 
@@ -56,4 +56,8 @@ export class IndexedDB implements AsyncStorage {
         return (await this.objectStore()).clear();
     }
 
+}
+
+function clone<T>(target: T, source: Partial<T> = {}) {
+    return Object.assign({}, JSON.parse(JSON.stringify(target)), source);
 }
