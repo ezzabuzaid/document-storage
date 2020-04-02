@@ -1,22 +1,25 @@
 ---
-
+title: Document Storage documentation
+author: Ezzabuzaid
+tags: 'Storage, Browser storage, indexeddb, odm,'
 
 ---
 
 <h1 id="a-faciliteated-way-to-maniplaute-docuemnt">A faciliteated way to maniplaute docuemnt</h1>
 <p><a href="https://github.com/ezzabuzaid/document-storage/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a> <a href="https://www.npmjs.com/package/@ezzabuzaid/document-storage"><img src="https://flat.badgen.net/npm/dm/@ezzabuzaid/document-storage" alt="Downloads per month"></a> <a href="https://www.npmjs.com/package/@ezzabuzaid/document-storage"><img src="https://flat.badgen.net/npm/v/@ezzabuzaid/document-storage" alt="Version"></a> <a href="https://www.npmjs.com/package/@ezzabuzaid/document-storage"><img src="https://flat.badgen.net/npm/license/@ezzabuzaid/document-storage" alt="License"></a> <img src="https://flat.badgen.net/badge/icon/Typed?icon=typescript&amp;label&amp;labelColor=blue&amp;color=555555" alt="Typed with TypeScript"></p>
-<h3 id="whats-the-library-for">What’s the library for?</h3>
+<p>Please consider following this project’s author, <a href="https://github.com/ezzabuzaid">Ezz</a>, and consider starring the project to show your ❤️ and support.</p>
+<h2 id="whats-the-library-for">What’s the library for?</h2>
 <p>Imagine that you’re working on an application that required to use browser storages depends on browser support, data amount, or a case that required to choose storage on runtime.</p>
 <p>You’re frequently changing your backend service and for a reason, you want to switch from firebase to another cool thing, and a problem arise where you afraid from changing due to different functionality, …etc.</p>
 <p>Facilitate the way to sync the data from the browser storage (WebSql, IndexDB) to the server either in Web worker or in the default browser context.</p>
-<h3 id="here-we-go">Here We Go</h3>
+<h4 id="here-we-go">Here We Go</h4>
 <blockquote>
 <p>(write once and change without worry)</p>
 </blockquote>
 <hr>
 <p>How to think of it!<br>
 <em>you have a key value pairs object and you want to treat it as model where you can save, update, retrive and delete the data from.</em></p>
-<h3 id="storges-and-apis">Storges And Api’s</h3>
+<h2 id="apis">Api’s</h2>
 <p><strong>Storages</strong></p>
 <ul>
 <li>
@@ -46,7 +49,7 @@
 7. collection.clear() | clear out the entire collection
 8. collection.get((T entity, number index) =&gt; boolean) | query for a specific entity and return the first match
 </code></pre>
-<h3 id="usage">Usage</h3>
+<h4 id="usage">Usage</h4>
 <p><strong>SyncDatabase</strong><br>
 First kind of database that implements the blocking operation like <code>LocalStorage</code></p>
 <pre><code>const pojo = {name:'MyName', age: 10};
@@ -63,7 +66,7 @@ const collection = db.collection('MyCollection');
 const entity = await collection.create(pojo);
 await collection.delete(entity.id);
 </code></pre>
-<h3 id="custom-storage">Custom Storage</h3>
+<h4 id="custom-storage">Custom Storage</h4>
 <p>In order to use custom storage all that you need is to Implement the either the <code>AsyncStorage</code> interface or <code>SyncStorage</code> depends on your needs</p>
 <pre><code>class BackendStorage implements AsyncStorage {
   get&lt;T&gt;(name: string): Promise&lt;Entity&lt;T&gt;&gt; {
@@ -90,7 +93,7 @@ const database = new AsyncDatabase(new BackendStorage());
 const collection = database.collection('MyCollection');
 </code></pre>
 <p>please note that the <code>url/${name}</code> <strong>name</strong> part is the collection name</p>
-<h3 id="worthnote">Worthnote</h3>
+<h2 id="worthnote">Worthnote</h2>
 <p>Should you use this library?<br>
 I think the above reasons are not desired all of this,<br>
 in general, overengineer the code is a bad thing, so you really need to think twice before immediately digging with it.</p>
@@ -132,5 +135,5 @@ For more information on SemVer, please visit <a href="http://semver.org">http://
 <li>Better error handling</li>
 <li>Limit collection size</li>
 </ul>
-<h5 id="built-with-love-3">Built with love &lt;3</h5>
+<h1 id="built-with-love-3">Built with love &lt;3</h1>
 
