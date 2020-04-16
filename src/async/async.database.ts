@@ -1,8 +1,8 @@
-import { AsyncStorage } from "../types";
+import { IAsyncStorage } from "../types";
 import { AsyncCollection } from "./async.collection";
 import { Database } from '../database';
 
-export class AsyncDatabase extends Database<AsyncStorage, AsyncCollection<any>> {
+export class AsyncDatabase extends Database<IAsyncStorage, AsyncCollection<any>> {
 
     /**
      * get the collection to able to access the write and read the data

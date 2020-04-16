@@ -1,6 +1,6 @@
 import { IDBPDatabase, openDB, IDBPTransaction } from 'idb';
-import { AsyncStorage } from '../types';
-export class IndexedDB implements AsyncStorage {
+import { IAsyncStorage } from '../types';
+export class IndexedDB implements IAsyncStorage {
     private database: IDBPDatabase = null;
     private databaseName = 'StorageStrategy';
     constructor(
@@ -49,7 +49,7 @@ export class IndexedDB implements AsyncStorage {
     public async get<T>(name: string) {
         const list = await (await this.objectStore()).getAll();
         const document = list.find(doc => doc.name === name);
-        return document && JSON.parse(document.value);
+        return document && clone(document.value);
     }
 
     public async clear() {
@@ -58,6 +58,6 @@ export class IndexedDB implements AsyncStorage {
 
 }
 
-function clone<T>(target: T, source: Partial<T> = {}) {
-    return Object.assign({}, JSON.parse(JSON.stringify(target)), source);
+function clone<T>(target: T) {
+    return JSON.parse(JSON.stringify(target));
 }

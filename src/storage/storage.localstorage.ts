@@ -1,9 +1,19 @@
-import { SyncStorage } from "../types";
+import { ISyncStorage } from "../types";
 import { isBrowser } from "../utils";
 
 declare var localStorage;
 
-export class LocalStorage implements SyncStorage {
+/**
+ * LocalStorage is a wrapper around the native `browser localstorage` that offers the ability
+ * to have `namespaces` within it
+ * ```
+ * const namespace1 = new LocalStorage('MyNamespace1');
+ * const namespace2 = new LocalStorage('MyNamespace2');
+ * namespace1.set('key', value);
+ * namespace2.get('key') | returns null;
+ * ```
+ */
+export class LocalStorage implements ISyncStorage {
   protected _storage = null;
 
   public get storage() {
@@ -24,11 +34,17 @@ export class LocalStorage implements SyncStorage {
     public name = 'storage',
   ) { }
 
-  public dataSet() {
+  /**
+   * @internal
+   */
+  private dataSet() {
     const storage = JSON.parse(this.storage.getItem(this.name))
     return storage || {};
   }
 
+  /**
+   * @internal
+   */
   private presist<T>(name: string, value: T) {
     const item = this.dataSet();
     const temp = item[name];
@@ -41,13 +57,13 @@ export class LocalStorage implements SyncStorage {
    * 
    * @param name name of the entity
    */
-  public set<T>(name: string, value: any) {
+  public set<T>(name: string, value: T) {
     return this.presist<T>(name, value);
   }
 
   /**
    * 
-   * @param name get an entity by it's key
+   * @param name name of the entity
    */
   public get<T>(name: string): T {
     return this.dataSet()[name] || null;
@@ -65,7 +81,7 @@ export class LocalStorage implements SyncStorage {
 
   /**
    * 
-   * @param name name of the entity,
+   * @param name name of the entity
    * store the value as null
    */
   public delete<T>(name: string) {

@@ -1,6 +1,6 @@
-import { SyncStorage } from "../types";
+import { ISyncStorage } from "../types";
 
-export class InMemory implements SyncStorage {
+export class InMemory implements ISyncStorage {
     storage = {};
     constructor() { }
 

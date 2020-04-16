@@ -1,9 +1,9 @@
 import { isItemExist, not, isNullOrUndefiend } from "../utils";
-import { AsyncStorage, Entity } from "../types";
+import { IAsyncStorage, Entity } from "../types";
 export class AsyncCollection<T> {
 
     constructor(
-        private storage: AsyncStorage,
+        private storage: IAsyncStorage,
         private name: string,
     ) { }
 
