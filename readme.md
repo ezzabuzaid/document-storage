@@ -153,8 +153,6 @@ For more information on SemVer, please visit <a href="http://semver.org">http://
 <li><a href="https://github.com/ezzabuzaid">GitHub</a></li>
 <li><a href="https://www.linkedin.com/in/ezzabuzaid">Linkedin</a></li>
 </ul>
-<h2 id="maintainers">Maintainers</h2>
-<p><a href="https://github.com/ezzabuzaid"><strong>ezzabuzaid</strong></a> - (author) - <a href="mailto:ezzabuzaid@hotmail.com">ezzabuzaid@hotmail.com</a></p>
 <h2 id="license">License</h2>
 <h5 id="the-mit-license-mit">The MIT License (MIT)</h5>
 <h3 id="todo">TODO</h3>
