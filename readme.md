@@ -5,7 +5,7 @@ tags: 'Storage, Browser storage, indexeddb, odm,'
 
 ---
 
-<h1 id="a-faciliteated-way-to-maniplaute-docuemnt">A faciliteated way to maniplaute docuemnt</h1>
+<h1 id="a-faciliteated-way-to-maniplaute-objects">A faciliteated way to maniplaute objects</h1>
 <p><a href="https://github.com/ezzabuzaid/document-storage/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a> <a href="https://www.npmjs.com/package/@ezzabuzaid/document-storage"><img src="https://flat.badgen.net/npm/dm/@ezzabuzaid/document-storage" alt="Downloads per month"></a> <a href="https://www.npmjs.com/package/@ezzabuzaid/document-storage"><img src="https://flat.badgen.net/npm/v/@ezzabuzaid/document-storage" alt="Version"></a> <a href="https://www.npmjs.com/package/@ezzabuzaid/document-storage"><img src="https://flat.badgen.net/npm/license/@ezzabuzaid/document-storage" alt="License"></a> <img src="https://flat.badgen.net/badge/icon/Typed?icon=typescript&amp;label&amp;labelColor=blue&amp;color=555555" alt="Typed with TypeScript"></p>
 <p>Please consider following this project’s author, <a href="https://github.com/ezzabuzaid">Ezz</a>, and consider starring the project to show your ❤️ and support.</p>
 <h2 id="whats-the-library-for">What’s the library for?</h2>
@@ -58,7 +58,7 @@ const collection = db.collection('MyCollection');
 const entity = collection.create(pojo);
 collection.delete(entity.id);
 </code></pre>
-<p>AsyncDatabase<br>
+<p><strong>AsyncDatabase</strong><br>
 Second kind of database that implements the non-blocking operation like <code>IndexedDB</code>, <code>Http</code> and any Storage that doesn’t block the execution</p>
 <pre><code>const pojo = {name:'MyName', age: 10};
 const db = new AsyncDatabase(new IndexDB('MyObjectStore'));
@@ -67,8 +67,8 @@ const entity = await collection.create(pojo);
 await collection.delete(entity.id);
 </code></pre>
 <h4 id="custom-storage">Custom Storage</h4>
-<p>In order to use custom storage all that you need is to Implement the either the <code>AsyncStorage</code> interface or <code>SyncStorage</code> depends on your needs</p>
-<pre><code>class BackendStorage implements AsyncStorage {
+<p>In order to use custom storage all that you need is to Implement the either the <code>IAsyncStorage</code> interface or <code>ISyncStorage</code> depends on your needs</p>
+<pre><code>class BackendStorage implements IAsyncStorage {
   get&lt;T&gt;(name: string): Promise&lt;Entity&lt;T&gt;&gt; {
     return fetch(`url/${name}`)
       .then(res =&gt; res.json());
@@ -93,6 +93,34 @@ const database = new AsyncDatabase(new BackendStorage());
 const collection = database.collection('MyCollection');
 </code></pre>
 <p>please note that the <code>url/${name}</code> <strong>name</strong> part is the collection name</p>
+<h4 id="standalone-instantiating">Standalone instantiating</h4>
+<p>Up until now, you learned how to use the offered <strong>Storages</strong> with <strong>Database</strong> and how we can store multiple collections within each storage<br>
+but what if you just want to deal with <strong>LocalStorage</strong> directly or <strong>InMemoryStorage</strong>!<br>
+All storages implement ISyncStorage, therefore, the offered API’s are the same</p>
+<pre><code>const storage = new Storage('NameSpace');
+storage.set('myKey', [{}]) | save the [{}] inside the localstorage;
+storage.get('myKey') | retrieve the associated value from localstorage.NameSpace
+storage.delete('myKey') | delete the associated value
+storage.clear(); | clear out the entire NameSpace
+</code></pre>
+<h5 id="framework-integration">Framework integration</h5>
+<ul>
+<li>Angular<br>
+Angular uses a dependency injection framework to handle instances instantiating so we need to adhere to that way in order to get the same instance from the root module<br>
+<strong>Note</strong>: lazy loading modules working differently which implies that lazyloaded module instances are different from eager modules instances</li>
+</ul>
+<pre><code>providers: [
+	{
+		provide:  LocalStorage,
+		useValue:  new  LocalStorage('StorageName'),
+	},
+	{
+		provide:  SessionStorage,
+		useValue:  new  SessionStorage('StorageName'),
+	}
+]
+</code></pre>
+<p><strong>SSR</strong> will required additional setup by the way since LocalStorage, SessionStorage not available in server side</p>
 <h2 id="worthnote">Worthnote</h2>
 <p>Should you use this library?<br>
 I think the above reasons are not desired all of this,<br>
