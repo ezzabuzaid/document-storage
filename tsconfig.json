@@ -10,6 +10,9 @@
     "moduleResolution": "node",
     "baseUrl": "./src/",
     "esModuleInterop": true,
+    "types": [
+      "@types/node"
+    ]
   },
   "exclude": [
     "./**/*.spec.ts"
