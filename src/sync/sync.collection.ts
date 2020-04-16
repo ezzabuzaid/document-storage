@@ -1,10 +1,19 @@
 import { isItemExist, not, isNullOrUndefiend } from "../utils";
-import { SyncStorage, Entity } from "../types";
+import { ISyncStorage, Entity } from "../types";
 
+/**
+ * 
+ * Collection is a set of objects collected in @type {Array}
+ * each one of those objects has id property the identifies it
+ */
 export class SyncCollection<T> {
-
+    /**
+     * 
+     * @param {ISyncStorage} storage
+     * @param {string} name 
+     */
     constructor(
-        private storage: SyncStorage,
+        private storage: ISyncStorage,
         private name: string,
     ) { }
 
@@ -22,7 +31,7 @@ export class SyncCollection<T> {
     }
 
     private update(entites: Entity<T>[]) {
-        return this.storage.set<T>(this.name, entites);
+        return this.storage.set<T>(this.name, entites as any);
     }
 
     public create(entity: T): Entity<T> {
@@ -54,6 +63,11 @@ export class SyncCollection<T> {
         }
     }
 
+    /**
+     * Delete an entity by specifing its id 
+     * @param id of the entity
+     * @returns the deleted entity or null if the id is not belong to any entity within the collection 
+     */
     public delete(id: number): Entity<T> {
         const entites = this.getAll();
         const exist = isItemExist(entites, id)
@@ -65,16 +79,34 @@ export class SyncCollection<T> {
         return exist.entity;
     }
 
+    /**
+     * where like function to return the first element that matches the condition
+     * @param queryCallback the where conditions to apply on the entire collection
+     */
     public get(queryCallback: (object: Entity<T>) => boolean) {
         const entites = this.getAll();
         return entites.find(queryCallback) || null;
     }
 
-    public getAll() {
-        return this.storage.get<T>(this.name) || [];
+    /**
+     * Get all collection entites
+     * @throws {TypeError} if the collection is not of type array
+     */
+    public getAll(): Entity<T>[] {
+        const entites = this.storage.get<T>(this.name);
+        if (Array.isArray(entites)) {
+            return entites;
+        }
+        if (isNullOrUndefiend(entites)) {
+            return [] as Entity<T>[];
+        }
+        throw new TypeError(`${this.name} is not array type`);
     }
 
-    public clear() {
+    /**
+     * Clear out the entire collection
+     */
+    public clear(): void {
         this.storage.clear(this.name);
     }
 

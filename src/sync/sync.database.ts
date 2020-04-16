@@ -1,10 +1,12 @@
 import { SyncCollection } from './sync.collection';
-import { SyncStorage } from '../types';
+import { ISyncStorage } from '../types';
 import { Database } from '../database';
 
-export class SyncDatabase extends Database<SyncStorage, SyncCollection<any>> {
+export class SyncDatabase extends Database<ISyncStorage, SyncCollection<any>> {
     /**
-     * get the collection to able to access the write and read the data
+     * Return the collection if exist otherwise it will be created first then returned 
+     * @param name the name of the collection to return
+     * @returns {SyncCollection<T>}
      */
     collection<T>(name: string): SyncCollection<T> {
         return this.get(name) || this.create(name, SyncCollection);
@@ -22,8 +24,3 @@ export class SyncDatabase extends Database<SyncStorage, SyncCollection<any>> {
     }
 
 }
-
-// const database1 = new Database(new LocalStorage('testDB'));
-// const database3 = new Database(new SessionStorage('testDB'));
-// const database2 = new Database(new InMemory());
-// TODO schema validation

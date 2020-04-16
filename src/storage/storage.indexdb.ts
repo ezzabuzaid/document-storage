@@ -1,6 +1,6 @@
 import { IDBPDatabase, openDB, IDBPTransaction } from 'idb';
-import { AsyncStorage } from '../types';
-export class IndexedDB implements AsyncStorage {
+import { IAsyncStorage } from '../types';
+export class IndexedDB implements IAsyncStorage {
     private database: IDBPDatabase = null;
     private databaseName = 'StorageStrategy';
     constructor(
