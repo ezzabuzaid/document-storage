@@ -5,6 +5,7 @@ export * from './async/async.collection';
 export * from './async/async.database';
 export * from './storage/storage.session';
 export * from './storage/storage.indexdb';
+export * from './storage/storage.keyvalue';
 export * from './storage/storage.localstorage';
 export * from './storage/storage.memory';
 export * from './database';

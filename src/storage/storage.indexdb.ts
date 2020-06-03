@@ -26,7 +26,7 @@ export class IndexedDB implements IAsyncStorage {
             return (await this.openDatabase()).transaction(this.objectStoreName, 'readwrite');
         } catch (error) {
             // TODO: if object store not exist an DOMException will thrown, this should be handled gracefully
-            return (await this.openDatabase(this.database.version + 1, true)).transaction(this.objectStoreName, 'readwrite');
+            return (await this.openDatabase(this.database ? this.database.version + 1 : 1, true)).transaction(this.objectStoreName, 'readwrite');
         }
     }
 
