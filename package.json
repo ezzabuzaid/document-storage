@@ -2,7 +2,10 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "node .js && tsc",
-    "test": "jest"
+    "test": "jest",
+    "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
+    "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
+    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
   },
   "dependencies": {
     "idb": "^5.0.1",
@@ -11,6 +14,7 @@
   "devDependencies": {
     "@types/jest": "^25.1.2",
     "@types/node": "^13.11.1",
+    "generate-changelog": "^1.8.0",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.0",
     "ts-lint": "^4.5.1",
