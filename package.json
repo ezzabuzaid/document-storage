@@ -5,7 +5,11 @@
     "test": "jest",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor",
-    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch"
+    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch",
+    "sync": "cp readme.md package.json package-lock.json ./dist",
+    "version:patch": "npm version patch -m 'update patch version'",
+    "version:minor": "npm version minor -m 'update minor version'",
+    "version:major": "npm version major -m 'update major version'"
   },
   "dependencies": {
     "idb": "^5.0.1",
