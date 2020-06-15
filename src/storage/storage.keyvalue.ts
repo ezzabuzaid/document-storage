@@ -23,7 +23,3 @@ export class KeyValueStore implements IAsyncStorage {
     }
 
 }
-
-function clone<T>(target: T) {
-    return JSON.parse(JSON.stringify(target));
-}
