@@ -1,3 +1,13 @@
+### 0.7.0 (2020-06-15)
+
+##### Continuous Integration
+
+*  update pipeline to publish dist folder only (d9795499)
+
+##### New Features
+
+* **IAsyncStorage:**  doesn't require Entity type anymore (bfbfd0b1)
+
 #### 0.6.2 (2020-06-15)
 
 ##### Build System / Dependencies
