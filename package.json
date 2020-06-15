@@ -6,10 +6,7 @@
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch",
-    "sync": "cp readme.md package.json package-lock.json ./dist",
-    "version:patch": "npm version patch -m 'update patch version'",
-    "version:minor": "npm version minor -m 'update minor version'",
-    "version:major": "npm version major -m 'update major version'"
+    "sync": "cp readme.md package.json package-lock.json ./dist"
   },
   "dependencies": {
     "idb": "^5.0.1",
@@ -31,7 +28,7 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Easy interface for document manualpation",
   "keywords": [
     "Storage",
