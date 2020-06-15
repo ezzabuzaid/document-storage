@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
+      - run: npm run build
 
   publish-npm:
     needs: build
@@ -29,7 +30,6 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
       - run: npm run sync
       - run: npm publish ./dist
         env:

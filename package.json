@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "prepublish": "npm run build",
     "build": "node .js && tsc",
     "test": "jest",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major",
