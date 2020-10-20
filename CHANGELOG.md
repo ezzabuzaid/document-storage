@@ -2,6 +2,22 @@
 
 ##### Build System / Dependencies
 
+*  remove declarationMap option from tsconfig file (bdb9f853)
+*  run sync command after build directly (d0e0ffb5)
+*  remove build script before publish (4e0fe2a5)
+
+##### Continuous Integration
+
+*  update pipeline to publish dist folder only (d9795499)
+
+##### New Features
+
+* **IAsyncStorage:**  doesn't require Entity type anymore (bfbfd0b1)
+
+#### 0.6.3 (2020-10-20)
+
+##### Build System / Dependencies
+
 *  run sync command after build directly (d0e0ffb5)
 *  remove build script before publish (4e0fe2a5)
 
