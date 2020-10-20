@@ -3,12 +3,11 @@
     "target": "es2018",
     "module": "commonjs",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "outDir": "./dist/",
     "rootDir": "./src/",
     "moduleResolution": "node",
     "baseUrl": "./src/",
+    "inlineSourceMap": true,
     "esModuleInterop": true,
     "types": [
       "@types/node"
