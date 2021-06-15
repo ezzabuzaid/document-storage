@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "incremental": true,
+    "target": "ES2015",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist/",
-    "rootDir": "./src/",
+    "inlineSources": true,
+    "outDir": "./dist",
+    "removeComments": false,
+    "noEmit": false,
+    "importHelpers": true,
+    "strict": true,
+    "noImplicitAny": true,
     "moduleResolution": "node",
-    "baseUrl": "./src/",
+    "baseUrl": "./src",
+    "declarationMap": false,
     "inlineSourceMap": true,
-    "esModuleInterop": true,
     "types": [
       "@types/node"
     ]
