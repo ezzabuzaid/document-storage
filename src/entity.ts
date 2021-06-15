@@ -1,3 +1,5 @@
+export type EntityId = string | number;
+
 export type Entity<T> = T & {
-    readonly id: string | number
+    readonly id: EntityId;
 };

@@ -1,6 +1,6 @@
 import { Existance, IAsyncStorage } from "../types";
 import { addId, hasId, isItemExist, not } from "../utils";
-import { Entity } from "../entity";
+import { Entity, EntityId } from "../entity";
 
 export class AsyncCollection<T> {
 
@@ -55,7 +55,7 @@ export class AsyncCollection<T> {
         }
     }
 
-    public async delete(id: number): Promise<Entity<T> | null> {
+    public async delete(id: EntityId): Promise<Entity<T> | null> {
         const entites = await this.getAll();
         const exist = isItemExist(entites, id);
         if (not(exist)) {

@@ -1,6 +1,6 @@
 import { Existance, ISyncStorage } from "../types";
 import { addId, hasId, isItemExist, isNullOrUndefiend, not } from "../utils";
-import { Entity } from "../entity";
+import { Entity, EntityId } from "../entity";
 
 /**
  * 
@@ -68,7 +68,7 @@ export class SyncCollection<T> {
      * @param id of the entity
      * @returns the deleted entity or null if the id is not belong to any entity within the collection 
      */
-    public delete(id: number): Entity<T> | null {
+    public delete(id: EntityId): Entity<T> | null {
         const entites = this.getAll();
         const exist = isItemExist(entites, id)
         if (not(exist)) {

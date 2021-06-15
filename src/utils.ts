@@ -1,4 +1,4 @@
-import { Entity } from "./entity";
+import { Entity, EntityId } from "./entity";
 
 export const find = <T>(value: any, by: keyof T) => (obj: T) => obj[by] === value;
 
@@ -7,7 +7,7 @@ export const find = <T>(value: any, by: keyof T) => (obj: T) => obj[by] === valu
  * @param items an array of object
  * @param id 
  */
-export function isItemExist<T>(items: Entity<T>[], id: number | string) {
+export function isItemExist<T>(items: Entity<T>[], id: EntityId) {
     const index = items.findIndex(find(id, 'id'));
     if (index > -1) {
         return {
@@ -42,7 +42,7 @@ export function hasId<T>(value: T): value is Entity<T> {
     return 'id' in value;
 }
 
-export function addId<T>(value: T, id?: string | number | null): Entity<T> {
+export function addId<T>(value: T, id?: EntityId | null): Entity<T> {
     return Object.assign(value, { id: id ?? uniqueId() });
 }
 
