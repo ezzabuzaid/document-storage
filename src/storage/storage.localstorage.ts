@@ -1,7 +1,7 @@
 import { ISyncStorage } from "../types";
 import { isBrowser } from "../utils";
 
-declare var localStorage;
+declare var localStorage: Storage;
 
 /**
  * LocalStorage is a wrapper around the native `browser localstorage` that offers the ability
@@ -14,7 +14,7 @@ declare var localStorage;
  * ```
  */
 export class LocalStorage implements ISyncStorage {
-  protected _storage = null;
+  protected _storage: Storage | undefined;
 
   public get storage() {
     if (isBrowser()) {
@@ -38,14 +38,15 @@ export class LocalStorage implements ISyncStorage {
    * @internal
    */
   private dataSet() {
-    const storage = JSON.parse(this.storage.getItem(this.name))
+    const item = this.storage.getItem(this.name);
+    const storage = item ? JSON.parse(item) : null;
     return storage || {};
   }
 
   /**
    * @internal
    */
-  private presist<T>(name: string, value: T) {
+  private presist<T>(name: string, value: any) {
     const item = this.dataSet();
     const temp = item[name];
     item[name] = value;

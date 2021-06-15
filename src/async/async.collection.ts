@@ -1,5 +1,7 @@
-import { isItemExist, not, isNullOrUndefiend } from "../utils";
-import { IAsyncStorage, Entity } from "../types";
+import { Existance, IAsyncStorage } from "../types";
+import { addId, hasId, isItemExist, not } from "../utils";
+import { Entity } from "../entity";
+
 export class AsyncCollection<T> {
 
     constructor(
@@ -8,13 +10,13 @@ export class AsyncCollection<T> {
     ) { }
 
     private async _create(entites: Entity<T>[], entity: T) {
-        entity['id' as any] = Date.now();
+        addId(entity, hasId(entity) ? entity.id : undefined);
         entites.push(entity as Entity<T>);
         await this.update(entites);
         return entity as Entity<T>;
     }
 
-    private async _put(entites: Entity<T>[], entity: Entity<T>, existance: ReturnType<typeof isItemExist>) {
+    private async _put(entites: Entity<T>[], entity: Entity<T>, existance: Existance<T>) {
         entites[existance.index] = entity;
         await this.update(entites);
         return entity;
@@ -28,7 +30,7 @@ export class AsyncCollection<T> {
         return this._create(await this.getAll(), entity);
     }
 
-    public async put(entity: Entity<T>): Promise<Entity<T>> {
+    public async put(entity: Entity<T>): Promise<Entity<T> | null> {
         const entites = await this.getAll();
         const exist = isItemExist(entites, entity.id);
         if (not(exist)) {
@@ -39,21 +41,21 @@ export class AsyncCollection<T> {
 
     public async set(entity: T) {
         const entites = await this.getAll();
-        const id = entity['id'];
-        if (not(isNullOrUndefiend(id))) {
-            const exist = isItemExist(entites, id);
+
+        if (hasId(entity)) {
+            const exist = isItemExist(entites, entity.id);
             if (not(exist)) {
-                entity['id'] = null;
+                addId(entity, null);
                 await this.set(entity);
             } else {
-                return this._put(entites, entity as Entity<T>, exist);
+                return this._put(entites, entity, exist);
             }
         } else {
             return this._create(entites, entity);
         }
     }
 
-    public async delete(id: number): Promise<Entity<T>> {
+    public async delete(id: number): Promise<Entity<T> | null> {
         const entites = await this.getAll();
         const exist = isItemExist(entites, id);
         if (not(exist)) {

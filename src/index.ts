@@ -9,3 +9,4 @@ export * from './storage/storage.keyvalue';
 export * from './storage/storage.localstorage';
 export * from './storage/storage.memory';
 export * from './database';
+export * from './entity';

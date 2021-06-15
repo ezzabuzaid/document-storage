@@ -1,5 +1,6 @@
-import { isItemExist, not, isNullOrUndefiend } from "../utils";
-import { ISyncStorage, Entity } from "../types";
+import { Existance, ISyncStorage } from "../types";
+import { addId, hasId, isItemExist, isNullOrUndefiend, not } from "../utils";
+import { Entity } from "../entity";
 
 /**
  * 
@@ -17,14 +18,14 @@ export class SyncCollection<T> {
         private name: string,
     ) { }
 
-    private _create(entites: Entity<T>[], entity: T) {
-        entity['id' as any] = Date.now();
+    private _create(entites: Entity<T>[], entity: T | Entity<T>) {
+        addId(entity, hasId(entity) ? entity.id : undefined);
         entites.push(entity as Entity<T>);
         this.update(entites);
         return entity as Entity<T>;
     }
 
-    private _put(entites: Entity<T>[], entity: Entity<T>, existance: ReturnType<typeof isItemExist>) {
+    private _put(entites: Entity<T>[], entity: Entity<T>, existance: Existance<T>) {
         entites[existance.index] = entity;
         this.update(entites);
         return entity;
@@ -38,7 +39,7 @@ export class SyncCollection<T> {
         return this._create(this.getAll(), entity);
     }
 
-    public put(entity: Entity<T>): Entity<T> {
+    public put(entity: Entity<T>): Entity<T> | null {
         const entites = this.getAll();
         const exist = isItemExist(entites, entity.id);
         if (not(exist)) {
@@ -49,14 +50,13 @@ export class SyncCollection<T> {
 
     public set(entity: T) {
         const entites = this.getAll();
-        const id = entity['id'];
-        if (not(isNullOrUndefiend(id))) {
-            const exist = isItemExist(entites, id);
+        if (hasId(entity)) {
+            const exist = isItemExist(entites, entity.id);
             if (not(exist)) {
-                entity['id'] = null;
+                addId(entity, null);
                 this.set(entity);
             } else {
-                return this._put(entites, entity as Entity<T>, exist);
+                return this._put(entites, entity, exist);
             }
         } else {
             return this._create(entites, entity);
@@ -68,7 +68,7 @@ export class SyncCollection<T> {
      * @param id of the entity
      * @returns the deleted entity or null if the id is not belong to any entity within the collection 
      */
-    public delete(id: number): Entity<T> {
+    public delete(id: number): Entity<T> | null {
         const entites = this.getAll();
         const exist = isItemExist(entites, id)
         if (not(exist)) {
@@ -100,7 +100,7 @@ export class SyncCollection<T> {
         if (isNullOrUndefiend(entites)) {
             return [] as Entity<T>[];
         }
-        throw new TypeError(`${this.name} is not array type`);
+        throw new TypeError(`${ this.name } is not array type`);
     }
 
     /**

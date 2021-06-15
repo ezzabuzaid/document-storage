@@ -1,7 +1,7 @@
 import { ISyncStorage } from "../types";
 
 export class InMemory implements ISyncStorage {
-    storage = {};
+    storage: Record<string, any> = {};
     constructor() { }
 
     /**

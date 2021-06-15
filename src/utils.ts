@@ -1,12 +1,14 @@
-export const find = (value: any, by: string) => obj => obj[by] === value;
+import { Entity } from "./entity";
+
+export const find = <T>(value: any, by: keyof T) => (obj: T) => obj[by] === value;
 
 /**
  * @internal
  * @param items an array of object
  * @param id 
  */
-export function isItemExist<T>(items: T[], id: number) {
-    const index = items.findIndex(find(+id, 'id'));
+export function isItemExist<T>(items: Entity<T>[], id: number | string) {
+    const index = items.findIndex(find(id, 'id'));
     if (index > -1) {
         return {
             entity: items[index],
@@ -19,14 +21,14 @@ export function isItemExist<T>(items: T[], id: number) {
 /**
  * Convert the givin value to boolean type
  */
-export function not(value: any) {
+export function not(value: any): value is null | undefined {
     return !!!value;
 }
 
 /**
  * Check if the `valus` is `null` or `undefiend`
  */
-export function isNullOrUndefiend(value: any) {
+export function isNullOrUndefiend(value: any): value is null | undefined {
     return value === null || value === undefined;
 }
 /**
@@ -35,3 +37,12 @@ export function isNullOrUndefiend(value: any) {
 export function isBrowser() {
     return typeof window !== 'undefined' && typeof window.document !== 'undefined';
 }
+
+export function hasId<T>(value: T): value is Entity<T> {
+    return 'id' in value;
+}
+
+export function addId<T>(value: T, id?: string | number | null): Entity<T> {
+    return Object.assign(value, { id: id ?? Date.now() });
+}
+

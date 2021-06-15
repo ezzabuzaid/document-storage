@@ -9,8 +9,8 @@ export class Database<TStorage, TCollection> {
         return this.collections[name];
     }
 
-    protected create(name: string, BaseCollection) {
-        const collection = new (BaseCollection as any)(this.storage, name);
+    protected create<T extends { new(storage: TStorage, name: string): any }>(name: string, BaseCollection: T) {
+        const collection = new BaseCollection(this.storage, name);
         this.collections[name] = collection;
         return collection;
     }

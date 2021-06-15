@@ -1,7 +1,7 @@
 import { IDBPDatabase, openDB, IDBPTransaction } from 'idb';
 import { IAsyncStorage } from '../types';
 export class IndexedDB implements IAsyncStorage {
-    private database: IDBPDatabase = null;
+    private database: IDBPDatabase | null = null;
     private databaseName = 'StorageStrategy';
     constructor(
         private objectStoreName: string,
@@ -34,7 +34,7 @@ export class IndexedDB implements IAsyncStorage {
         return (await this.transaction()).objectStore(this.objectStoreName);
     }
 
-    public async set<T>(name: string, value) {
+    public async set<T>(name: string, value: any) {
         const store = (await this.objectStore());
         const list = await store.getAll();
         const document = list.find(doc => doc.name === name);
