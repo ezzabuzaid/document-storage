@@ -1,4 +1,4 @@
-import { Existance, ISyncStorage } from "../types";
+import { Existance, ISyncStorage, QueryCallback } from "../types";
 import { addId, hasId, isItemExist, isNullOrUndefiend, not } from "../utils";
 import { Entity, EntityId } from "../entity";
 
@@ -83,7 +83,7 @@ export class SyncCollection<T> {
      * where like function to return the first element that matches the condition
      * @param queryCallback the where conditions to apply on the entire collection
      */
-    public get(queryCallback: (object: Entity<T>) => boolean) {
+    public get(queryCallback: QueryCallback<T>) {
         const entites = this.getAll();
         return entites.find(queryCallback) || null;
     }
@@ -92,13 +92,10 @@ export class SyncCollection<T> {
      * Get all collection entites
      * @throws {TypeError} if the collection is not of type array
      */
-    public getAll(): Entity<T>[] {
-        const entites = this.storage.get<T>(this.name);
+    public getAll(queryCallback?: QueryCallback<T>): Entity<T>[] {
+        const entites = this.storage.get<T>(this.name) ?? [];
         if (Array.isArray(entites)) {
-            return entites;
-        }
-        if (isNullOrUndefiend(entites)) {
-            return [] as Entity<T>[];
+            return queryCallback ? entites.filter(queryCallback) : entites;
         }
         throw new TypeError(`${ this.name } is not array type`);
     }

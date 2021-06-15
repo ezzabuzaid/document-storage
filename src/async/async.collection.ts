@@ -1,4 +1,4 @@
-import { Existance, IAsyncStorage } from "../types";
+import { Existance, IAsyncStorage, QueryCallback } from "../types";
 import { addId, hasId, isItemExist, not } from "../utils";
 import { Entity, EntityId } from "../entity";
 
@@ -66,13 +66,17 @@ export class AsyncCollection<T> {
         return exist.entity;
     }
 
-    public async get(queryCallback: (object: Entity<T>, index?: number) => boolean) {
+    public async get(queryCallback: QueryCallback<T>) {
         const entites = await this.getAll();
         return entites.find(queryCallback) || null;
     }
 
-    public async getAll() {
-        return (await this.storage.get<T>(this.name)) || [];
+    public async getAll(queryCallback?: QueryCallback<T>) {
+        const entites = (await this.storage.get<T>(this.name)) ?? [];
+        if (Array.isArray(entites)) {
+            return queryCallback ? entites.filter(queryCallback) : entites;
+        }
+        throw new TypeError(`${ this.name } is not array type`);
     }
 
     public async clear() {

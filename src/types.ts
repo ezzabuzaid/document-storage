@@ -21,3 +21,5 @@ export interface IAsyncStorage {
     clear(name: string): Promise<void>;
     set<T>(name: string, value: T[]): Promise<void>;
 }
+
+export type QueryCallback<T> = (object: Entity<T>, index: number) => boolean;
