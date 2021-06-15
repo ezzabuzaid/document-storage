@@ -1,15 +1,17 @@
 {
   "scripts": {
-    "build": "node .js && tsc",
+    "prebuild": "del ./dist/",
+    "build": "tsc",
+    "postbuild": "cpy 'readme.md' 'package*.json' ./dist/ --no-overwrite --parents",
     "test": "jest",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor",
-    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch",
-    "sync": "cp readme.md package.json package-lock.json ./dist"
+    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch"
   },
   "dependencies": {
     "idb": "^5.0.1",
-    "idb-keyval": "^3.2.0"
+    "idb-keyval": "^3.2.0",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@types/jest": "^25.1.2",
@@ -18,15 +20,18 @@
     "jest": "^25.1.0",
     "ts-jest": "^25.2.0",
     "ts-lint": "^4.5.1",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.3",
+    "cpy-cli": "^3.1.1",
+    "del-cli": "^3.0.1"
   },
   "name": "@ezzabuzaid/document-storage",
   "bugs": {
     "email": "ezzabuzaid@hotmail.com",
     "url": "https://github.com/ezzabuzaid/document-storage/issues"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "readme": "./readme.md",
   "version": "0.6.3",
   "description": "Easy interface for document manualpation",
   "keywords": [
