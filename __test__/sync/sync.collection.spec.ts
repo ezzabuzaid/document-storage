@@ -1,18 +1,18 @@
-import { SyncCollection, SyncStorage } from "../../src/index";
+import { ISyncStorage, SyncCollection } from "../../src/index";
 class Todo {
     constructor(public name: string) { }
 }
 describe('#SyncCollection', () => {
     let collection: SyncCollection<Todo>;
-    let mockStorage: SyncStorage;
+    let mockStorage: ISyncStorage;
     const COLLECTION_NAME = 'test';
     beforeEach(function () {
-        const mockStorageFn = jest.fn<Partial<SyncStorage>, any>((() => ({
+        const mockStorageFn = jest.fn<Partial<ISyncStorage>, any>((() => ({
             clear: jest.fn(),
             get: jest.fn().mockReturnValue([]),
             set: jest.fn()
         })));
-        mockStorage = mockStorageFn() as SyncStorage;
+        mockStorage = mockStorageFn() as ISyncStorage;
         collection = new SyncCollection<Todo>(mockStorage, COLLECTION_NAME);
     });
 

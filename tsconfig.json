@@ -7,7 +7,7 @@
     "inlineSources": true,
     "outDir": "./dist",
     "rootDir": "./src/",
-    "baseUrl": "./src",
+    "baseUrl": "./src/",
     "removeComments": false,
     "noEmit": false,
     "importHelpers": true,
@@ -21,7 +21,8 @@
     ]
   },
   "exclude": [
-    "./**/*.spec.ts",
+    "__test__",
+    "dist",
     "node_modules"
   ]
 }

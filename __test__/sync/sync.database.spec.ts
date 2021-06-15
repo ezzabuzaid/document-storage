@@ -1,10 +1,10 @@
-import { SyncDatabase, SyncStorage, Database } from "../../src/index";
+import { SyncDatabase, ISyncStorage, Database } from "../../src/index";
 
 describe('#Sync Database', () => {
-    const mockStorageFn = jest.fn<Partial<SyncStorage>, any>((() => ({
+    const mockStorageFn = jest.fn<Partial<ISyncStorage>, any>((() => ({
         clear: jest.fn()
     })));
-    const mockStorage = mockStorageFn() as SyncStorage;
+    const mockStorage = mockStorageFn() as ISyncStorage;
 
     const database = new SyncDatabase(mockStorage);
     it('should check if a collection is exist', () => {
