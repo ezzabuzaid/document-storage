@@ -43,6 +43,10 @@ export function hasId<T>(value: T): value is Entity<T> {
 }
 
 export function addId<T>(value: T, id?: string | number | null): Entity<T> {
-    return Object.assign(value, { id: id ?? Date.now() });
+    return Object.assign(value, { id: id ?? uniqueId() });
 }
 
+
+export function uniqueId() {
+    return Date.now() + Math.ceil(Math.sqrt(Math.random()) * 1000);
+}
