@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "target": "es2018",
+    "target": "ES6",
     "module": "commonjs",
     "declaration": true,
     "inlineSources": true,
