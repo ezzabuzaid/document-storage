@@ -1,3 +1,15 @@
+## 1.0.0 (2021-08-15)
+
+##### Chores
+
+*  change build target to ES6 (b822bc2c)
+*  change build target to es2018 (bd36efc1)
+*  revet rootDir option in tsconfig (9a16c45b)
+
+##### Refactors
+
+*  rename test folder to __test__ (dff1d9e2)
+
 ### 0.7.0 (2021-06-15)
 
 ##### Build System / Dependencies

@@ -1,19 +1,19 @@
 import { IAsyncStorage } from "../types";
 import { AsyncCollection } from "./async.collection";
 import { Database } from '../database';
+import { Entity } from "../entity";
 
-export class AsyncDatabase extends Database<IAsyncStorage, AsyncCollection<any>> {
+export class AsyncDatabase extends Database<IAsyncStorage<any>, AsyncCollection<any>> {
 
     /**
-     * get the collection to able to access the write and read the data
+     * Get the collection to able to access the write and read the data
      */
-    collection<T>(name: string): AsyncCollection<T> {
+    collection<T extends Entity<Record<string, any>>>(name: string): AsyncCollection<T> {
         return this.get(name) || this.create(name, AsyncCollection);
     }
 
     /**
-     * clear the entire datebase
-     * NOTE this will note gonna remove the object it self so you can reassign values to it 
+     * Clear the entire datebase
      */
     async clear() {
         const names = Object.keys(this.collections);

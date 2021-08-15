@@ -6,20 +6,20 @@ export interface Existance<T> {
 }
 
 /**
- * ISyncStorage store the the data within namespaces, each namespace have it's own method to deal and maniuplate the data like storing and retrieving
+ * Store the the data within namespaces, each namespace have it's own method to deal and maniuplate the data like storing and retrieving
  * 
- * @param name of storage namespace
+ * @param name storage namespace
  */
-export interface ISyncStorage {
-    get<T>(name: string): T;
-    clear(name: string): void;
-    set<T>(name: string, value: T): void;
+export interface ISyncStorage<T> {
+    get(name: string): T;
+    clear(): void;
+    set(name: string, value: T): void;
 }
 
-export interface IAsyncStorage {
-    get<T>(name: string): Promise<Entity<T>[]>;
-    clear(name: string): Promise<void>;
-    set<T>(name: string, value: T[]): Promise<void>;
+export interface IAsyncStorage<T> {
+    get(name: string): Promise<T>;
+    clear(): Promise<void>;
+    set(name: string, value: T): Promise<void>;
 }
 
-export type QueryCallback<T> = (object: Entity<T>, index: number) => boolean;
+export type QueryCallback<T> = (object: T, index: number) => boolean;

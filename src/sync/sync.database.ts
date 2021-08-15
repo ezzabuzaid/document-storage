@@ -1,14 +1,15 @@
 import { SyncCollection } from './sync.collection';
 import { ISyncStorage } from '../types';
 import { Database } from '../database';
+import { Entity } from '../entity';
 
-export class SyncDatabase extends Database<ISyncStorage, SyncCollection<any>> {
+export class SyncDatabase extends Database<ISyncStorage<any>, SyncCollection<any>> {
     /**
      * Return the collection if exist otherwise it will be created first then returned 
      * @param name the name of the collection to return
      * @returns {SyncCollection<T>}
      */
-    collection<T>(name: string): SyncCollection<T> {
+    collection<T extends Entity<Record<string, any>>>(name: string): SyncCollection<T> {
         return this.get(name) || this.create(name, SyncCollection);
     }
 

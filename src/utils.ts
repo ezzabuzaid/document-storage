@@ -7,7 +7,7 @@ export const find = <T>(value: any, by: keyof T) => (obj: T) => obj[by] === valu
  * @param items an array of object
  * @param id 
  */
-export function isItemExist<T>(items: Entity<T>[], id: EntityId) {
+export function isItemExist(items: Entity<any>[], id: EntityId) {
     const index = items.findIndex(find(id, 'id'));
     if (index > -1) {
         return {
@@ -38,12 +38,12 @@ export function isBrowser() {
     return typeof window !== 'undefined' && typeof window.document !== 'undefined';
 }
 
-export function hasId<T>(value: T): value is Entity<T> {
+export function hasId<T>(value: T): value is Entity<any> {
     return 'id' in value;
 }
 
-export function addId<T>(value: T, id?: EntityId | null): Entity<T> {
-    return Object.assign(value, { id: id ?? uniqueId() });
+export function addId<T>(value: T, id?: EntityId | null): asserts value is Entity<T> {
+    Object.assign(value, { id: id ?? uniqueId() });
 }
 
 

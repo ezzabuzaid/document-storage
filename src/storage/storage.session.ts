@@ -1,5 +1,5 @@
-import { LocalStorage } from "./storage.localstorage";
 import { isBrowser } from "../utils";
+import { AbstractStorage } from "./abstract_storage";
 
 /**
  * SessionStorage is a wrapper around the native `browser sessionstorage` that offers the ability
@@ -11,30 +11,23 @@ import { isBrowser } from "../utils";
  * namespace2.get('key') | returns null;
  * ```
  */
-export class SessionStorage extends LocalStorage {
-
-    public get storage() {
-        if (isBrowser()) {
-            return this._storage || sessionStorage;
-        } else if (this._storage) {
-            return this._storage;
-        } else {
-            throw new TypeError('sessionStorage is not supported in non browser env');
-        }
-    }
-
-    public set storage(value) {
-        this._storage = value;
-    }
+export class SessionStorage<T> extends AbstractStorage<T> {
 
     /**
-     * 
+     *
      * @param name name of storage namespace
      */
     constructor(
         public name = 'storage',
     ) {
-        super(name);
+        super(name, (() => {
+            if (isBrowser()) {
+                return sessionStorage;
+            } else {
+                throw new TypeError('sessionStorage is not supported in non browser env');
+            }
+        })())
     }
+
 }
 

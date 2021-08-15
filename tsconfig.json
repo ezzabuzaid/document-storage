@@ -14,10 +14,7 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "declarationMap": false,
-    "inlineSourceMap": true,
-    "types": [
-      "@types/node"
-    ]
+    "inlineSourceMap": true
   },
   "exclude": [
     "__test__",

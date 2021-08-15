@@ -1,8 +1,7 @@
-import { Store, clear, get, set } from 'idb-keyval';
+import { clear, get, set, Store } from 'idb-keyval';
 import { IAsyncStorage } from '../types';
-import { Entity } from "../entity";
 
-export class KeyValueStore implements IAsyncStorage {
+export class KeyValueStore<T> implements IAsyncStorage<T> {
     private databaseName = 'StorageStrategy';
     private store: Store;
     constructor(
@@ -11,12 +10,12 @@ export class KeyValueStore implements IAsyncStorage {
         this.store = new Store(this.databaseName, this.name);
     }
 
-    public async set<T>(name: string, value: T) {
+    public async set(name: string, value: T) {
         return set(name, value, this.store);
     }
 
-    public get<T>(name: string) {
-        return get<Entity<T>>(name, this.store);
+    public get(name: string) {
+        return get<T>(name, this.store);
     }
 
     public async clear() {
