@@ -1,3 +1,25 @@
+### 0.8.0 (2021-08-15)
+
+##### Chores
+
+*  change build target to ES6 (b822bc2c)
+*  change build target to es2018 (bd36efc1)
+*  revet rootDir option in tsconfig (9a16c45b)
+
+##### Bug Fixes
+
+*  remove types from method levels to storage level (aab13fc4)
+*  imporve EntityId to take type (e4b612a9)
+
+##### Refactors
+
+*  rename test folder to __test__ (96680515)
+*  rename test folder to __test__ (dff1d9e2)
+
+##### Tests
+
+*  refactor collection tests (19ba7b86)
+
 ## 1.0.0 (2021-08-15)
 
 ##### Chores
