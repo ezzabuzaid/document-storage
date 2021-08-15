@@ -1,24 +1,48 @@
-import { AsyncDatabase, AsyncStorage, Database } from "../../src/index";
+import { AsyncDatabase, Entity } from "../../src/index";
+import { AsyncTodoStorage } from "../async_todo_storage";
+import { seedTodoAsync, Todo } from "../todo_seeder";
 
-describe('#AsyncDatabase', () => {
-    const mockStorageFn = jest.fn<Partial<AsyncStorage>, any>(() => ({
-        clear: jest.fn()
-    }));
-    const mockStorage = mockStorageFn() as AsyncStorage;
+describe('AsyncDatabase', () => {
 
-    const database = new AsyncDatabase(mockStorage);
-    it('should check if a collection is exist', () => {
-        expect(database.has('test')).toBeFalsy();
+    it('checks if a collection is exist', () => {
+        // Arrange
+        const database = new AsyncDatabase(new AsyncTodoStorage());
+        let actual, expected = false;
+
+        // Act
+        actual = database.has('test')
+
+        // Assert
+        expect(actual).toBe(expected);
     });
 
-    it('should add collection to the collections list', () => {
+    it('adds collection to the collections list', () => {
+        // Arrange
+        const database = new AsyncDatabase(new AsyncTodoStorage());
         database.collection('test');
-        expect(database.has('test')).toBeTruthy();
+        let actual, expected = true;
+
+        // Act
+        actual = database.has('test')
+
+        // Assert
+        expect(actual).toBe(expected);
     });
 
-    it('should clear out all data inside the collections', async () => {
-        database.collection('test');
+    it('clears all collections', async () => {
+        // Arrange
+        const database = new AsyncDatabase(new AsyncTodoStorage());
+        const firstCollection = database.collection<Entity<Todo>>('First');
+        const secondCollection = database.collection<Entity<Todo>>('Second');
+        await seedTodoAsync(firstCollection, 10);
+        await seedTodoAsync(secondCollection, 10);
+        let actual, expected = [[], []];
+
+        // Act
         await database.clear();
-        expect(mockStorage.clear).toBeCalled();
+        actual = [await firstCollection.getAll(), await secondCollection.getAll()];
+
+        // Assert
+        expect(actual).toEqual(expected);
     });
 });

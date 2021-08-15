@@ -1,14 +1,13 @@
-import { InMemory } from "../../src/storage/storage.memory";
+import { SessionStorage } from "../../src/storage/storage.session";
 
-describe('InMemory', () => {
-    it('returns null if key not exist', () => {
+describe('SessionStorage', () => {
+    it("returns null if key doesn't exist", () => {
         // Arrange
-        const storage = new InMemory();
+        const storage = new SessionStorage();
         let actual, expected = null;
 
-
         // Act
-        actual = storage.get('test');
+        actual = storage.get('foo');
 
         // Assert
         expect(actual).toBe(expected);
@@ -16,7 +15,7 @@ describe('InMemory', () => {
 
     it('stores and returns a value', () => {
         // Arrange
-        const storage = new InMemory();
+        const storage = new SessionStorage();
         let actual, expected = 'value';
 
         // Act
@@ -29,7 +28,7 @@ describe('InMemory', () => {
 
     it('returns the old value after override it', () => {
         // Arrange
-        const storage = new InMemory();
+        const storage = new SessionStorage();
         let actual, expected = 'value';
 
         // Act
@@ -40,22 +39,9 @@ describe('InMemory', () => {
         expect(actual).toEqual(expected);
     });
 
-    it('deletes a value', () => {
-        // Arrange
-        const storage = new InMemory();
-        let actual, expected = null;
-
-        // Act
-        storage.set('key', 'value');
-        storage.delete('key');
-        actual = storage.get('key')
-
-        expect(actual).toEqual(expected);
-    });
-
     it('returns the deleted value', () => {
         // Arrange
-        const storage = new InMemory();
+        const storage = new SessionStorage();
         let actual, expected = 'value';
 
         // Act
@@ -65,11 +51,24 @@ describe('InMemory', () => {
         expect(actual).toEqual(expected);
     });
 
+    it('deletes a value', () => {
+        // Arrange
+        const storage = new SessionStorage();
+        let actual, expected = null;
+
+
+        // Act
+        storage.set('key', 'value');
+        storage.delete('key');
+        actual = storage.get('key')
+
+        expect(actual).toEqual(expected);
+    });
+
     it('deletes the whole entries', () => {
         // Arrange
-        const storage = new InMemory();
+        const storage = new SessionStorage();
         let actual, expected = [null, null];
-
 
         // Act
         storage.set('key', 'value');

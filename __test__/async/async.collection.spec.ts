@@ -1,142 +1,279 @@
-import { AsyncCollection, AsyncStorage } from "../../src/index";
-class Todo {
-    constructor(public name: string) { }
-}
-describe('#AsyncCollection', () => {
-    let collection: AsyncCollection<Todo>;
-    let mockStorage: AsyncStorage;
-    const COLLECTION_NAME = 'test';
-    beforeEach(function () {
-        const mockStorageFn = jest.fn<Partial<AsyncStorage>, any>((() => ({
-            clear: jest.fn(),
-            get: jest.fn().mockReturnValue([]),
-            set: jest.fn()
-        })));
-        mockStorage = mockStorageFn() as AsyncStorage;
-        collection = new AsyncCollection<Todo>(mockStorage, COLLECTION_NAME);
-    });
+import { AsyncCollection, Entity } from "../../src/index";
+import { uniqueId } from "../../src/utils";
+import { AsyncTodoStorage } from "../async_todo_storage";
+import { makeTodos, seedTodoAsync, Todo } from "../todo_seeder";
+
+
+describe('AsyncCollection', () => {
 
     describe('[getAll]', () => {
-        it('Should invoke the get method from the storage', async () => {
-            await collection.getAll();
-            expect(mockStorage.get).toBeCalledTimes(1);
-            expect(mockStorage.get).toBeCalledWith(COLLECTION_NAME);
+        it('returns entire collection entities', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const actualTodos = makeTodos(50);
+            let expectedTodos;
+
+            // Act
+            for (const todo of actualTodos) {
+                await collection.create(todo);
+            }
+            expectedTodos = await collection.getAll();
+
+            // Asserts
+            expect(actualTodos).toEqual(expectedTodos)
         });
 
-        it('return empty list if the storage value is null or undefined', async () => {
-            expect(await collection.getAll()).toEqual([]);
+        it('returns empty list if the storage value is null or undefined', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const actualData: any[] = [];
+            let expectedData;
+
+            // Act
+            expectedData = await collection.getAll();
+
+            // Assert
+            expect(actualData).toEqual(expectedData);
         });
     });
 
     describe('[delete]', () => {
 
-        it('Should return null if the item is not exist', async () => {
-            expect(await collection.delete(0)).toBeNull();
+        it('returns null if the item is not exist', async () => {
+            // Arrange
+            const collection = makeCollection();
+            let actual = null;
+            let expected;
+
+            // Act
+            expected = await collection.delete(0);
+
+            // Assert
+            expect(actual).toBe(expected);
         });
 
-        it('Should delete an entity', async () => {
-            const todo = new Todo('test');
-            const firstTodo = await collection.create(todo);
-            const secondTodo = await collection.create(todo);
-            const thirdTodo = await collection.create(todo);
-            collection.delete(secondTodo.id);
-            expect(await collection.getAll()).toEqual([firstTodo, secondTodo]);
+        it('deletes an entity', async () => {
+            // Arrange
+            const collection = makeCollection();
+            await seedTodoAsync(collection, 10);
+
+            const actualTodos = (await collection.getAll()).slice(0, 9);
+            let expectedTodos: Entity<Todo>[];
+
+
+            // Act
+            const toBeDeletedTodo = await collection.get((_, index) => index === 9);
+            await collection.delete(toBeDeletedTodo!.id);
+            expectedTodos = await collection.getAll();
+
+            // Assert
+            expect(expectedTodos).toEqual(actualTodos);
         });
 
-        it('Should return the entity after delete it', async () => {
-            const rawTodo = new Todo('test');
-            const todo = await collection.create(rawTodo)
-            expect(await collection.delete(todo.id)).toBe(todo);
+        it('returns the entity after delete it', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const actualTodo = await collection.create(makeTodos(1)[0])
+            let expectedTodo = null;
+
+            // Act
+            expectedTodo = await collection.delete(actualTodo.id)
+            // Assert
+            expect(expectedTodo).toEqual(actualTodo);
         });
 
     });
 
     describe('[create]', () => {
 
-        it('Should invoke the set method from the storage', async () => {
-            const todo = await collection.create({ name: 'todo-0' });
-            expect(mockStorage.set).toBeCalledTimes(1);
-            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, [{ name: 'todo-0', id: todo.id }]);
+        it('creates an entity', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const actualTodo = new Todo('WriteUnitTest');
+            let expectedTodo;
+
+            // Act
+            await collection.create(actualTodo);
+            expectedTodo = await collection.get((todo) => todo.name === actualTodo.name);
+
+            // Assert
+            expect(actualTodo).toEqual(expectedTodo);
         });
 
-        it('Should increment the id to be unique', async () => {
-            const firstTodo = await collection.create({ name: 'todo-1' });
-            const todos = [firstTodo];
-            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, todos);
+        it('uses exiting entity id if found', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const customId = uniqueId();
+            const actualEntity: Entity<Todo> = {
+                id: customId,
+                ...new Todo('WriteUnitTest')
+            };
+            let expectedEntity;
 
-            todos.push(await collection.create({ name: 'todo-2' }));
-            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, todos);
+            // Act
+            await collection.create(actualEntity);
+            expectedEntity = await collection.get((todo) => todo.id === customId);
 
-            await collection.delete(firstTodo.id);
-            todos.splice(0, 1);
-
-            const rawTodo = { name: 'todo-3' };
-            const todo = await collection.create(rawTodo);
-            todos.push({ ...rawTodo, id: todo.id });
-            expect(mockStorage.set).toBeCalledWith(COLLECTION_NAME, todos);
+            // Assert
+            expect(actualEntity).toEqual(expectedEntity);
         });
+
+        it('generates id in case not defined', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const todo = new Todo('WriteUnitTest');
+
+            // Act
+            await collection.create(todo);
+            const entity = await collection.get((todo) => todo.name === todo.name);
+
+            // Assert
+            expect(entity!.id).toBeDefined();
+        });
+
     });
 
     describe('[set]', () => {
 
-        it('Should create new entity if it does not exist', async () => {
-            const rawTodo = new Todo('set');
-            const createdTodo = await collection.set(rawTodo);
-            expect(await collection.getAll()).toEqual([createdTodo]);
+        it('creates new entity if it does not exist', async () => {
+            // Arrange
+            const collection = makeCollection();
+            let actualEntity = {
+                id: uniqueId(),
+                ...new Todo('TestTodo')
+            };
+            let expectedEntity;
+
+            // Act
+            await collection.set(actualEntity);
+            expectedEntity = await collection.get(entity => entity.id === actualEntity.id);
+
+            // Assert
+            expect(actualEntity).toEqual(expectedEntity);
         });
 
-        it('Should update the entity if it does exist', async () => {
-            const rawTodo = new Todo('test');
-            const createdTodo = await collection.create(rawTodo);
-            createdTodo.name = 'Updated';
-            const updatedTodo = collection.set(createdTodo);
-            expect(collection.get((entity) => entity.id === createdTodo.id)).toEqual(updatedTodo);
+        it('updates an entity if it does exist', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const newTodoName = 'AfterUpdate';
+
+            let entityToBeUpdated = (await seedTodoAsync(collection, 1))[0];
+            const actualEntity = { ...entityToBeUpdated, name: newTodoName };
+            let expectedEntity: Entity<Todo>;
+
+            // Act
+            await collection.set(actualEntity);
+            const entites = await collection.getAll(entity => entity.id === actualEntity.id);
+            expectedEntity = entites[0];
+
+            // Assert
+            expect(entites.length).toEqual(1);
+            expect(actualEntity).toEqual(expectedEntity);
         });
 
     });
 
     describe('[put]', () => {
 
-        it('Should return null if the item is not exist', async () => {
-            expect(await collection.put({ id: 0, name: '' })).toBeNull();
+        it('returns null if the entity is not exist', async () => {
+            // Arrange
+            const collection = makeCollection();
+            const todoEntity = { id: uniqueId(), ...new Todo('TestName') };
+            const actual = null;
+            let expected;
+
+            // Act
+            expected = await collection.put(todoEntity);
+
+            // Assert
+            expect(actual).toBe(expected);
         });
 
-        it('Should update an entity', async () => {
-            const todo = new Todo('test');
-            const createdTodo = await collection.create(todo);
-            const updatedTodo = await collection.put(createdTodo);
-            createdTodo.name = 'updated';
-            expect(updatedTodo.name).toBe(createdTodo.name);
+        it('updates an entity', async () => {
+            // Arrange
+            const collection = makeCollection();
+            let entityToBeUpdated = (await seedTodoAsync(collection, 1))[0];
+            const newTodoName = 'AfterUpdate';
+            const actualEntity = { ...entityToBeUpdated, name: newTodoName };
+            let expectedEntity: Entity<Todo>;
+
+            // Act
+            await collection.put(actualEntity);
+            const entites = await collection.getAll(entity => entity.id === actualEntity.id);
+            expectedEntity = entites[0];
+
+            expect(entites.length).toEqual(1);
+            expect(actualEntity).toEqual(expectedEntity);
         });
 
-        it('Should return the entity after update it', async () => {
-            const todo = new Todo('test');
-            const createdTodo = await collection.create(todo);
-            const updatedTodo = await collection.put(createdTodo);
-            expect(updatedTodo).toBeDefined();
+        it('returns the entity after update it', async () => {
+            // Arrange
+            const collection = makeCollection();
+            let entityToBeUpdated = (await seedTodoAsync(collection, 1))[0];
+            const newTodoName = 'AfterUpdate';
+            const actualEntity = { ...entityToBeUpdated, name: newTodoName };
+            let expectedEntity: Entity<Todo> | null;
+
+            // Act
+            expectedEntity = await collection.put(actualEntity);
+
+            expect(actualEntity).toEqual(expectedEntity);
         });
 
     });
 
     describe('[get]', () => {
 
-        it('Should return null if the entity is not exist', async () => {
-            expect(await collection.get((entity) => entity.id === 5)).toBeNull();
+        it('returns null if the entity does not not exist', async () => {
+            // Arrange
+            const collection = makeCollection();
+            let actualTodo = null;
+            let expectedTodo;
+
+            // Act
+            expectedTodo = await collection.get((entity) => entity.id === 0);
+
+            // Assert
+            expect(actualTodo).toBe(expectedTodo);
         });
 
-        it('Should return an entity', async () => {
-            const todo = new Todo('test');
-            const createdTodo = await collection.create(todo);
-            expect(await collection.get((entity) => entity.id === createdTodo.id)).toEqual(createdTodo);
+        it('returns an entity', async () => {
+            // Arrange
+            const collection = makeCollection();
+            let actualEntity = (await seedTodoAsync(collection, 1))[0];
+            let expectedEntity;
+
+            // Act
+            expectedEntity = await collection.get((entity) => entity.id === actualEntity.id);
+
+            // Assert
+            expect(actualEntity).toEqual(expectedEntity);
         });
     });
 
     describe('[clear]', () => {
 
-        it('Should invoke the clear method from storage', async () => {
+        it('clears the entire collection', async () => {
+            // Arrange
+            const collection = makeCollection();
+            await seedTodoAsync(collection, 10);
+            const actualTodos: Entity<Todo>[] = [];
+            let expectedTodos;
+
+            // Act
             await collection.clear();
-            expect(mockStorage.clear).toBeCalledTimes(1);
+            expectedTodos = await collection.getAll();
+
+            // Assert
+            expect(actualTodos).toEqual(expectedTodos);
         });
 
     });
 });
+
+
+function makeCollection() {
+    const storage = new AsyncTodoStorage();
+    const collection = new AsyncCollection<Entity<Todo>>(storage, 'TodayTodos');
+    return collection;
+}
