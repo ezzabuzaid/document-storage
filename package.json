@@ -32,7 +32,7 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "readme": "./readme.md",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Easy interface for document manualpation",
   "keywords": [
     "Storage",

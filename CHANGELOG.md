@@ -18,6 +18,7 @@
 
 ##### New Features
 
+*  imporve EntityId to take type (e4b612a9)
 *  add QueryCallback to getAll (e89ae2d0)
 *  consider id in Collection.create, use typescript strict mode (e3c71722)
 * **IAsyncStorage:**  doesn't require Entity type anymore (bfbfd0b1)
